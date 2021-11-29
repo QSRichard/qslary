@@ -1,0 +1,4 @@
+/home/liushui/workspace/qslary/staticlibDymatic/CMakeFiles/rebuild_cache.dir
+/home/liushui/workspace/qslary/staticlibDymatic/CMakeFiles/main.dir
+/home/liushui/workspace/qslary/staticlibDymatic/CMakeFiles/edit_cache.dir
+/home/liushui/workspace/qslary/staticlibDymatic/CMakeFiles/mytest.dir

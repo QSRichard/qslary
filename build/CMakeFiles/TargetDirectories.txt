@@ -1,0 +1,4 @@
+/home/liushui/workspace/qslary/build/CMakeFiles/rebuild_cache.dir
+/home/liushui/workspace/qslary/build/CMakeFiles/edit_cache.dir
+/home/liushui/workspace/qslary/build/CMakeFiles/test_config.dir
+/home/liushui/workspace/qslary/build/CMakeFiles/qslary.dir

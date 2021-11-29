@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/liushui/workspace/qslary/staticlibDymatic/main.cc
+test.h
+/home/liushui/workspace/qslary/staticlibDymatic/test.h
+iostream
+-
+vector
+-
+map
+-
+
+/home/liushui/workspace/qslary/staticlibDymatic/test.h
+vector
+-
+map
+-
+iostream
+-
+stdio.h
+-
+
