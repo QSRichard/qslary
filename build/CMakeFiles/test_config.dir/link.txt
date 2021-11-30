@@ -1,1 +1,0 @@
-/usr/bin/c++   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function  -rdynamic CMakeFiles/test_config.dir/tests/test_config.cc.o  -o ../bin/test_config   -L/apps/qslary/usr/local/lib  -Wl,-rpath,/apps/qslary/usr/local/lib:/home/liushui/workspace/qslary/lib ../lib/libqslary.so -lyaml-cpp 

@@ -82,12 +82,28 @@
 // }
 
 void test_log(){
-    std::cout<<qslary::LoggerMgr::getInstance()->toYamlString()<<std::endl;
+
+    static qslary::Logger::ptr system_log=QSLARY_LOG_NAME("system");
+    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
+
+    std::cout<<"LoggerMgr::getInstance()..."<<std::endl<<std::endl;;
+    std::cout<<qslary::LoggerMgr::getInstance()->toYamlString()<<std::endl<<std::endl;
+
+    std::cout<<"LoadFile..."<<std::endl<<std::endl;
     YAML::Node root = YAML::LoadFile("/home/liushui/workspace/qslary/bin/config/log.yml");
-    std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+
+    std::cout<<"loadFromYaml()..."<<std::endl<<std::endl;
     qslary::Config::loadFromYaml(root);
-    std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
-    std::cout << qslary::LoggerMgr::getInstance()->toYamlString() << std::endl;
+
+    std::cout<<"again call LoggerMgr::getInstance()->toYamlString()... 反序列化"<<std::endl<<std::endl;
+    std::cout << "==========================" << std::endl;
+    std::cout << qslary::LoggerMgr::getInstance()->toYamlString() << std::endl<<std::endl;
+    std::cout << "==========================" << std::endl;
+    
+    std::cout<<root<<std::endl<<std::endl;
+    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
+    system_log->setFormatter("%d - %m%n");
+    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
 }
 
 

@@ -35,18 +35,23 @@ namespace qslary
 
     std::list<std::pair<std::string, const YAML::Node>> all_nodes;
 
+    // 列出所有的YAML::Node 节点
     listAllMember("", root, all_nodes);
     // std::cout<<all_nodes.size()<<std::endl;
     // for(auto i: all_nodes){
     //   std::cout<<i.first<<std::endl;
     // }
+
+    // key是prefix
     for (auto &it : all_nodes)
     {
       std::string key = it.first;
       if (key.empty())
         continue;
 
+      std::transform(key.begin(),key.end(),key.begin(),::tolower);
       ConfigBase::ptr val = Config::LookUpBase(key);
+
       if (val)
       {
         if (it.second.IsScalar())
@@ -55,8 +60,15 @@ namespace qslary
         }
         else
         {
+
           std::stringstream ss;
+
+          // it指向一个YAML节点 表示配置文件
           ss << it.second;
+          // std::cout << std::endl<<"++++++++++++++++++++++++++++++++++" <<std::endl<<std::endl;
+          // std::cout<<"stringstream is "<<std::endl<<std::endl;
+          // std::cout<<ss.str()<<std::endl;
+          // std::cout<<std::endl<<"++++++++++++++++++++++++++++++++++"<<std::endl<<std::endl;
           val->formString(ss.str());
         }
       }

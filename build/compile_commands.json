@@ -1,0 +1,25 @@
+[
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -D__FILE__=\\\"tests/test_config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_config.dir/tests/test_config.cc.o -c /home/liushui/workspace/qslary/tests/test_config.cc",
+  "file": "/home/liushui/workspace/qslary/tests/test_config.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/logger.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/logger.cc.o -c /home/liushui/workspace/qslary/qslary/logger.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/logger.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/config.cc.o -c /home/liushui/workspace/qslary/qslary/config.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/config.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/util.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/util.cc.o -c /home/liushui/workspace/qslary/qslary/util.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/util.cc"
+}
+]

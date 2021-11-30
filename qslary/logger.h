@@ -115,21 +115,31 @@ namespace qslary
     // 日志输出地
     class LoggerAppender
     {
+    friend class Logger;
     public:
         typedef std::shared_ptr<LoggerAppender> ptr;
         // FIXME LoggerAppender 的构造析构函数 以及子类的构造析构函数
         // LoggerAppender(){};
         virtual ~LoggerAppender(){};
+
         virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
+        
         virtual std::string toYamlString()=0;
 
-        void setFormatter(LoggerFormatter::ptr formater) { m_formater = formater; };
+        void setFormatter(LoggerFormatter::ptr formater);
+        
         LoggerFormatter::ptr getForamter() { return m_formater; };
+        
         void setLevel(LogLevel::Level level){ m_level=level;};
+        
         LogLevel::Level getLevel(){ return m_level;};
 
     protected:
+        /// 日志级别
         LoggerFormatter::ptr m_formater;
+        /// 是否有自己的日志格式器
+        bool m_hasFormatter=false;
+
         // FIXME LoggerAppender的LogLevel 以及构造和析构
         LogLevel::Level m_level=LogLevel::DEBUG;
     };
@@ -206,4 +216,5 @@ namespace qslary
     };
     typedef qslary::Singleton<LogManger> LoggerMgr;
 }
+
 #endif

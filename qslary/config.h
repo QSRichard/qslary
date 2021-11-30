@@ -13,6 +13,7 @@
 #include <boost/lexical_cast.hpp>
 #include <yaml-cpp/yaml.h>
 #include "logger.h"
+#include "util.h"
 namespace qslary
 {
 
@@ -284,7 +285,7 @@ namespace qslary
     {
     public:
         typedef std::shared_ptr<ConfigVar> ptr;
-        // TAG
+      
         typedef std::function<void(const T &old_value, const T &new_value)> on_change_cb;
 
         // 注意默认参数只能放在最后一个
@@ -292,6 +293,7 @@ namespace qslary
 
         const T getValue() const { return m_val; };
 
+        // TAG 在setValue 函数中调用监听器
         void setValue(const T &v)
         {
             if (v == m_val)
@@ -318,7 +320,7 @@ namespace qslary
             }
             catch (std::exception &e)
             {
-                QSLARY_LOG_ERROR(QSLARY_LOG_ROOT()) << "Config::toString exception" << e.what() << "convert: " << typeid(m_val).name() << " to std::string ";
+                QSLARY_LOG_ERROR(QSLARY_LOG_ROOT()) << "Config::toString exception" << e.what() << "convert: " << DEMANGLED_CLASS_NAME(&m_val) << " to std::string ";
             }
             return "";
         };
@@ -332,7 +334,7 @@ namespace qslary
             }
             catch (std::exception &e)
             {
-                QSLARY_LOG_ERROR(QSLARY_LOG_ROOT()) << "Config::fromString exception" << e.what() << "convert string to " << typeid(m_val).name();
+                QSLARY_LOG_ERROR(QSLARY_LOG_ROOT()) << "Config::fromString exception " << e.what() << " convert string to " << DEMANGLED_CLASS_NAME(&m_val);
             }
             return false;
         }

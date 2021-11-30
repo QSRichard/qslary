@@ -240,17 +240,38 @@ namespace qslary
     void Logger::setFormatter(LoggerFormatter::ptr val)
     {
         // qslary::LoggerFormatter::ptr new_val(new qslary::LoggerFormatter(val));
-        qslary::LoggerFormatter::ptr new_val=val;
-        if (new_val->isError())
-        {
-            std::cout << "Logger setFormatter name = " << m_name << " value = " << val->getPartten() << " invalid formatter" << std::endl;
-            return;
+        // qslary::LoggerFormatter::ptr new_val=val;
+        // if (new_val->isError())
+        // {
+        //     std::cout << "Logger setFormatter name = " << m_name << " value = " << val->getPartten() << " invalid formatter" << std::endl;
+        //     return;
+        // }
+        // m_formatter = new_val;
+
+        m_formatter = val;
+
+        for (auto &i : m_appenders)
+        {  
+            if (!i->m_hasFormatter)
+            {
+                i->m_formater = m_formatter;
+            }
         }
-        m_formatter = new_val;
     }
     void Logger::setFormatter(const std::string &val)
     {
-        m_formatter.reset(new qslary::LoggerFormatter(val));
+        // std::cout << "---" << val << std::endl;
+        qslary::LoggerFormatter::ptr new_val(new qslary::LoggerFormatter(val));
+        if (new_val->isError())
+        {
+            std::cout << "Logger setFormatter name=" << m_name
+                      << " value=" << val << " invalid formatter"
+                      << std::endl;
+            return;
+        }
+        //m_formatter = new_val;
+        setFormatter(new_val);
+        // m_formatter.reset(new qslary::LoggerFormatter(val));
     }
     LoggerFormatter::ptr Logger::getFormatter()
     {
@@ -260,8 +281,12 @@ namespace qslary
     std::string Logger::toYamlString(){
         YAML::Node node;
         node["name"]=m_name;
-        node["level"]=LogLevel::ToString(m_level);
-        if(!(m_formatter->getPartten().empty())){
+
+        if(m_level!=LogLevel::UNKONW){
+            node["level"] = LogLevel::ToString(m_level);
+        }
+        
+        if(m_formatter){
             node["formatter"]=m_formatter->getPartten();
         }
         for(auto& i:m_appenders){
@@ -276,7 +301,7 @@ namespace qslary
     {
         if (!appender->getForamter())
         {
-            appender->setFormatter(m_formatter);
+            appender->m_formater=m_formatter;
         }
         m_appenders.push_back(appender);
     }
@@ -338,9 +363,21 @@ namespace qslary
         log(LogLevel::Level::FATAL, event);
     }
 
+    void LoggerAppender::setFormatter(LoggerFormatter::ptr val){
+        m_formater=val;
+        if (m_formater)
+        {
+            m_hasFormatter = true;
+        }
+        else
+        {
+            m_hasFormatter = false;
+        }
+    }
+
     FileLogAppender::FileLogAppender(const std::string &filename) : m_filename(filename)
     {
-        m_filestream.open(m_filename);
+        reopen();
     };
 
     void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
@@ -367,6 +404,13 @@ namespace qslary
         YAML::Node node;
         node["type"]="FileLogAppender";
         node["file"]=m_filename;
+        if(m_level!=LogLevel::UNKONW){
+            node["level"]=LogLevel::ToString(m_level);
+        }
+        if (m_hasFormatter && m_formater)
+        {
+            node["formatter"] = m_formater->getPartten();
+        }
         std::stringstream ss;
         ss<<node;
         return ss.str();
@@ -384,8 +428,12 @@ namespace qslary
     std::string StdoutLogAppender::toYamlString(){
         YAML::Node node;
         node["type"]="StdoutLogAppender";
-        node["level"]=qslary::LogLevel::ToString(m_level);
-        node["formatter"]=m_formater->getPartten();
+        if(m_level!=LogLevel::UNKONW){
+            node["level"] = qslary::LogLevel::ToString(m_level);
+        }
+        if(m_hasFormatter && m_formater){
+            node["formatter"] = m_formater->getPartten();
+        }
         std::stringstream ss;
         ss<<node;
         return ss.str();
@@ -588,7 +636,7 @@ namespace qslary
     {
         std::string name;
         LogLevel::Level level = LogLevel::UNKONW;
-        std::string formatter="";
+        std::string formatter;
         std::vector<LogAppenderDefine> appenders;
 
         bool operator==(const LogDefine& oth) const
@@ -602,140 +650,260 @@ namespace qslary
         }
     };
 
-    // 针对std::set<LogDefine>偏特化
-    template<>
-    class LexicalCast<std::string,std::set<LogDefine>>{
-        public:
-            std::set<LogDefine> operator()(const std::string& v){
-                YAML::Node node=YAML::Load(v);
-                std::set<LogDefine> ret;
-                for(size_t i=0;i<node.size();i++){
-                    auto n=node[i];
-                    LogDefine ld;
-                    ld.name=n["name"].as<std::string>();
-                    ld.level=LogLevel::FromString(n["level"].as<std::string>());
-                    if(n["formatter"].IsDefined()){
-                        ld.formatter=n["formatter"].as<std::string>();
-                    }
-                    if(n["appenders"].IsDefined()){
-                        for(size_t j=0;j<n["appenders"].size();j++){
-                            auto t=n["appenders"][j];
-                            LogAppenderDefine lad;
-                            std::string type=t["type"].as<std::string>();
-                            if(type=="FileLogAppender"){
-                                lad.type=2;
-                                lad.file=t["file"].as<std::string>();
-                            }else if(type=="StdoutLogAppender"){
-                                lad.type=1;
-                            }
-                            else{
-                                std::cout<<"log config error: appender type is invalid "<<type<<std::endl;
-                                continue;
-                            }
-                            lad.level=qslary::LogLevel::FromString(t["level"].as<std::string>());
-                            lad.formatter=t["formatter"].as<std::string>();
-                            ld.appenders.push_back(lad);
-                        }
-                    }
-                    ret.insert(ld);
-                }
-                return ret;
+    template <>
+    class LexicalCast<std::string, LogDefine>
+    {
+    public:
+        LogDefine operator()(const std::string &v)
+        {
+            YAML::Node n = YAML::Load(v);
+            LogDefine ld;
+            if (!n["name"].IsDefined())
+            {
+                std::cout << "log config error: name is null, " << n
+                          << std::endl;
+                throw std::logic_error("log config name is null");
             }
-    };
-    // 针对std::set<LogDefine>偏特化
-    template<>
-    class LexicalCast<std::set<LogDefine>,std::string>{
-        public:
-            std::string operator()(const std::set<LogDefine>& v){
-                YAML::Node node;
-                for(auto& i:v){
-                    node["name"]=i.name;
-                    node["level"]=qslary::LogLevel::ToString(i.level);
-                    node["formatter"]=i.formatter;
-                    for(size_t j=0;j<i.appenders.size();j++){
-                        YAML::Node na;
-                        if(i.appenders[j].type==2){
-                            na["type"]="FileLogAppender";
-                            na["file"]=i.appenders[j].file;
-                        }else if(i.appenders[j].type==1){
-                            na["type"]="StdoutLogAppender";
-                        }
-                        na["level"]=qslary::LogLevel::ToString(i.appenders[j].level);
-                        na["formatter"]=i.appenders[j].formatter;
-                        node["appenders"].push_back(na);
-                    }
-                }
-                std::stringstream ss;
-                ss<<node;
-                return ss.str();
+            ld.name = n["name"].as<std::string>();
+            ld.level = LogLevel::FromString(n["level"].IsDefined() ? n["level"].as<std::string>() : "");
+            if (n["formatter"].IsDefined())
+            {
+                ld.formatter = n["formatter"].as<std::string>();
             }
-    };
 
-
-    // 偏特化
-    template<>
-    class LexicalCast<std::string,LogDefine>{
-        public:
-            LogDefine operator()(const std::string& v){
-                YAML::Node node=YAML::Load(v);
-                LogDefine ret;
-
-                ret.name=node["name"].as<std::string>();
-                ret.level=LogLevel::FromString(node["level"].as<std::string>());
-                ret.formatter=node["formatter"].as<std::string>();
-
-                // for appenders
-                for(size_t i=0;i<node["appenders"].size();i++){
-                    auto t=node["appenders"][i];
-                    LogAppenderDefine def;
-                    std::string type=t["type"].as<std::string>();
-                    if(type=="FileLogAppender"){
-                        def.type=2;
-                        def.file=t["file"].as<std::string>();
-                        if(t["formatter"].IsDefined()){
-                            def.formatter=t["formatter"].as<std::string>();
-                        }
-                    }
-                    else if(type=="StdoutLogAppender"){
-                        def.type=1;
-                    }
-                    else{
-                        std::cout<<"Log config error appenser type is invalid, "<<type<<std::endl;
+            if (n["appenders"].IsDefined())
+            {
+                //std::cout << "==" << ld.name << " = " << n["appenders"].size() << std::endl;
+                for (size_t x = 0; x < n["appenders"].size(); ++x)
+                {
+                    auto a = n["appenders"][x];
+                    if (!a["type"].IsDefined())
+                    {
+                        std::cout << "log config error: appender type is null, " << a
+                                  << std::endl;
                         continue;
                     }
-                    ret.appenders.push_back(def);
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    class LexicalCast<LogDefine,std::string>{
-        public:
-            std::string operator()(const LogDefine& v){
-                YAML::Node node;
-                node["name"]=v.name;
-                node["level"]=qslary::LogLevel::ToString(v.level);
-                node["formatter"]=v.formatter;
-                for(size_t i=0;i<v.appenders.size();i++){
-                    YAML::Node na;
-                    if(v.appenders[i].type==1){
-                        na["type"]="StdoutLogAppender";
-                    }else if(v.appenders[i].type==2){
-                        na["type"]="FileLogAppender";
-                        na["file"]=v.appenders[i].file;
+                    std::string type = a["type"].as<std::string>();
+                    LogAppenderDefine lad;
+                    if (type == "FileLogAppender")
+                    {
+                        lad.type = 2;
+                        if (!a["file"].IsDefined())
+                        {
+                            std::cout << "log config error: fileappender file is null, " << a
+                                      << std::endl;
+                            continue;
+                        }
+                        lad.file = a["file"].as<std::string>();
+                        if (a["formatter"].IsDefined())
+                        {
+                            lad.formatter = a["formatter"].as<std::string>();
+                        }
                     }
-                    na["level"]=qslary::LogLevel::ToString(v.appenders[i].level);
-                    node["appenders"].push_back(na);
+                    else if (type == "StdoutLogAppender")
+                    {
+                        lad.type = 1;
+                        if (a["formatter"].IsDefined())
+                        {
+                            lad.formatter = a["formatter"].as<std::string>();
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "log config error: appender type is invalid, " << a
+                                  << std::endl;
+                        continue;
+                    }
+
+                    ld.appenders.push_back(lad);
                 }
-                std::stringstream ss;
-                ss<<node;
-                return ss.str();
             }
+            return ld;
+        }
     };
 
-    // TAG
+    template <>
+    class LexicalCast<LogDefine, std::string>
+    {
+    public:
+        std::string operator()(const LogDefine &i)
+        {
+            YAML::Node n;
+            n["name"] = i.name;
+            if (i.level != LogLevel::UNKONW)
+            {
+                n["level"] = LogLevel::ToString(i.level);
+            }
+            if (!i.formatter.empty())
+            {
+                n["formatter"] = i.formatter;
+            }
+
+            for (auto &a : i.appenders)
+            {
+                YAML::Node na;
+                if (a.type == 2)
+                {
+                    na["type"] = "FileLogAppender";
+                    na["file"] = a.file;
+                }
+                else if (a.type == 1)
+                {
+                    na["type"] = "StdoutLogAppender";
+                }
+                if (a.level != LogLevel::UNKONW)
+                {
+                    na["level"] = LogLevel::ToString(a.level);
+                }
+
+                if (!a.formatter.empty())
+                {
+                    na["formatter"] = a.formatter;
+                }
+
+                n["appenders"].push_back(na);
+            }
+            std::stringstream ss;
+            ss << n;
+            return ss.str();
+        }
+    };
+
+    // // 偏特化
+    // template<>
+    // class LexicalCast<std::string,LogDefine>{
+    //     public:
+    //         LogDefine operator()(const std::string& v){
+    //             YAML::Node node=YAML::Load(v);
+    //             LogDefine ret;
+
+    //             ret.name=node["name"].as<std::string>();
+    //             ret.level=LogLevel::FromString(node["level"].as<std::string>());
+    //             ret.formatter=node["formatter"].as<std::string>();
+
+    //             // for appenders
+    //             for(size_t i=0;i<node["appenders"].size();i++){
+    //                 auto t=node["appenders"][i];
+    //                 LogAppenderDefine def;
+    //                 std::string type=t["type"].as<std::string>();
+    //                 if(type=="FileLogAppender"){
+    //                     def.type=2;
+    //                     def.file=t["file"].as<std::string>();
+    //                     if(t["formatter"].IsDefined()){
+    //                         def.formatter=t["formatter"].as<std::string>();
+    //                     }
+    //                 }
+    //                 else if(type=="StdoutLogAppender"){
+    //                     def.type=1;
+    //                 }
+    //                 else{
+    //                     std::cout<<"Log config error appenser type is invalid, "<<type<<std::endl;
+    //                     continue;
+    //                 }
+    //                 ret.appenders.push_back(def);
+    //             }
+
+    //             return ret;
+    //         }
+    // };
+
+    // template<>
+    // class LexicalCast<LogDefine,std::string>{
+    //     public:
+    //         std::string operator()(const LogDefine& v){
+    //             YAML::Node node;
+    //             node["name"]=v.name;
+    //             node["level"]=qslary::LogLevel::ToString(v.level);
+    //             node["formatter"]=v.formatter;
+    //             for(size_t i=0;i<v.appenders.size();i++){
+    //                 YAML::Node na;
+    //                 if(v.appenders[i].type==1){
+    //                     na["type"]="StdoutLogAppender";
+    //                 }else if(v.appenders[i].type==2){
+    //                     na["type"]="FileLogAppender";
+    //                     na["file"]=v.appenders[i].file;
+    //                 }
+    //                 na["level"]=qslary::LogLevel::ToString(v.appenders[i].level);
+    //                 node["appenders"].push_back(na);
+    //             }
+    //             std::stringstream ss;
+    //             ss<<node;
+    //             return ss.str();
+    //         }
+    // };
+
+    // // 针对std::set<LogDefine>偏特化
+    // template<>
+    // class LexicalCast<std::string,std::set<LogDefine>>{
+    //     public:
+    //         std::set<LogDefine> operator()(const std::string& v){
+    //             YAML::Node node=YAML::Load(v);
+    //             std::set<LogDefine> ret;
+    //             for(size_t i=0;i<node.size();i++){
+    //                 auto n=node[i];
+    //                 LogDefine ld;
+    //                 ld.name=n["name"].as<std::string>();
+    //                 ld.level=LogLevel::FromString(n["level"].as<std::string>());
+    //                 if(n["formatter"].IsDefined()){
+    //                     ld.formatter=n["formatter"].as<std::string>();
+    //                 }
+    //                 if(n["appenders"].IsDefined()){
+    //                     for(size_t j=0;j<n["appenders"].size();j++){
+    //                         auto t=n["appenders"][j];
+    //                         LogAppenderDefine lad;
+    //                         std::string type=t["type"].as<std::string>();
+    //                         if(type=="FileLogAppender"){
+    //                             lad.type=2;
+    //                             lad.file=t["file"].as<std::string>();
+    //                         }else if(type=="StdoutLogAppender"){
+    //                             lad.type=1;
+    //                         }
+    //                         else{
+    //                             std::cout<<"log config error: appender type is invalid "<<type<<std::endl;
+    //                             continue;
+    //                         }
+    //                         lad.level=qslary::LogLevel::FromString(t["level"].as<std::string>());
+    //                         lad.formatter=t["formatter"].as<std::string>();
+    //                         ld.appenders.push_back(lad);
+    //                     }
+    //                 }
+    //                 ret.insert(ld);
+    //             }
+    //             return ret;
+    //         }
+    // };
+    // // 针对std::set<LogDefine>偏特化
+    // template<>
+    // class LexicalCast<std::set<LogDefine>,std::string>{
+    //     public:
+    //         std::string operator()(const std::set<LogDefine>& v){
+    //             YAML::Node node;
+    //             for(auto& i:v){
+    //                 node["name"]=i.name;
+    //                 node["level"]=qslary::LogLevel::ToString(i.level);
+    //                 node["formatter"]=i.formatter;
+    //                 for(size_t j=0;j<i.appenders.size();j++){
+    //                     YAML::Node na;
+    //                     if(i.appenders[j].type==2){
+    //                         na["type"]="FileLogAppender";
+    //                         na["file"]=i.appenders[j].file;
+    //                     }else if(i.appenders[j].type==1){
+    //                         na["type"]="StdoutLogAppender";
+    //                     }
+    //                     na["level"]=qslary::LogLevel::ToString(i.appenders[j].level);
+    //                     na["formatter"]=i.appenders[j].formatter;
+    //                     node["appenders"].push_back(na);
+    //                 }
+    //             }
+    //             std::stringstream ss;
+    //             ss<<node;
+    //             return ss.str();
+    //         }
+    // };
+
+
+
+    // TAG 在这里执行了lookup()函数 会在GetData()得到的map<string,ConfigBase&>中加入一个entry
     qslary::ConfigVar<std::set<LogDefine>>::ptr g_log_defines =
     qslary::Config::lookup("logs", std::set<LogDefine>(), "logs config");
 
@@ -773,6 +941,16 @@ namespace qslary
                             ap.reset(new FileLogAppender(a.file));
                         }
                         ap->setLevel(a.level);
+                        if(!a.formatter.empty()){
+                            LoggerFormatter::ptr fmt(new LoggerFormatter(a.formatter));
+                            if(!fmt->isError()){
+                                // std::cout<<"00000000000000000000000"<<std::endl;
+                                ap->setFormatter(fmt);
+                            }else{
+                                std::cout<<"logger.name = "<<i.name<<" appender type = "<<a.type
+                                                           <<" formatter = "<<a.formatter<<"is invalib"<<std::endl;
+                            }
+                        }
                         logger->addAppender(ap);
                     }
                 }
@@ -788,10 +966,11 @@ namespace qslary
         }
     };
 
+    // TAG 全局静态变量 会在这里执行构造函数 在构造函数中对 g_log_defines加入一个监听器 监听器会在setValue()函数中被调用
     static LogIniter __log_init;
 
     // TODO 完成init
     void LogManger::init()
     {
     }
-}
+}                                    
