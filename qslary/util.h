@@ -8,16 +8,19 @@
 #include <cxxabi.h>
 #include <memory>
 #include <stdlib.h>
-namespace qslary{
-    namespace detail{
+namespace qslary
+{
+  namespace detail
+  {
 
-        pid_t getThreadId();
-        uint32_t getFiberId();
+    pid_t getThreadId();
+    uint64_t getFiberId();
 
-        std::shared_ptr<char> cppDemangled(const char *abiName);
+    std::shared_ptr<char> cppDemangled(const char *abiName);
 
-        #define DEMANGLED_CLASS_NAME(somePointer) ((const char *)qslary::detail::cppDemangled(typeid(*somePointer).name()).get())
-    }
+#define DEMANGLED_CLASS_NAME(somePointer) ((const char *)qslary::detail::cppDemangled(typeid(*somePointer).name()).get())
+
+  }
 }
 
 #endif

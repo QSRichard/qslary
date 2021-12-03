@@ -1,6 +1,0 @@
-2021-11-30 21:33:50	[INFO]	hello system
-
-
-2021-11-30 21:33:50	[INFO]	hello system
-
-

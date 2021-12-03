@@ -12,4 +12,5 @@ mkdir -p $BUILD_DIR/ && cd $BUILD_DIR && cmake $SOURCE_DIR && make $* -j4
 
 if [[ $? -eq 0 ]];then 
     figlet Comliler Successfully
+    sleep 1s && clear
 fi

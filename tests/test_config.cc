@@ -69,7 +69,7 @@
 
 //     YAML::Node root = YAML::LoadFile("/home/liushui/workspace/qslary/bin/config/log.yml");
 //     qslary::Config::loadFromYaml(root);
-   
+
 //     QSLARY_LOG_INFO(QSLARY_LOG_ROOT())<<"after int: "<<g_int_value_config->getValue();
 //     QSLARY_LOG_INFO(QSLARY_LOG_ROOT())<<"after float: "<<g_float_value_config->toString();
 
@@ -81,42 +81,54 @@
 //     XX_A(g_unordered_map_int_value_config, unordered_map, after);
 // }
 
-void test_log(){
+void test_log()
+{
 
-    static qslary::Logger::ptr system_log=QSLARY_LOG_NAME("system");
-    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
+  static qslary::Logger::ptr system_log = QSLARY_LOG_NAME("system");
+  QSLARY_LOG_INFO(system_log) << "hello system" << std::endl
+                              << std::endl;
 
-    std::cout<<"LoggerMgr::getInstance()..."<<std::endl<<std::endl;;
-    std::cout<<qslary::LoggerMgr::getInstance()->toYamlString()<<std::endl<<std::endl;
+  std::cout << "LoggerMgr::getInstance()..." << std::endl
+            << std::endl;
+  ;
+  std::cout << qslary::LoggerMgr::getInstance()->toYamlString() << std::endl
+            << std::endl;
 
-    std::cout<<"LoadFile..."<<std::endl<<std::endl;
-    YAML::Node root = YAML::LoadFile("/home/liushui/workspace/qslary/bin/config/log.yml");
+  std::cout << "LoadFile..." << std::endl
+            << std::endl;
+  YAML::Node root = YAML::LoadFile("/home/liushui/workspace/qslary/bin/config/log.yml");
 
-    std::cout<<"loadFromYaml()..."<<std::endl<<std::endl;
-    qslary::Config::loadFromYaml(root);
+  std::cout << "loadFromYaml()..." << std::endl
+            << std::endl;
+  qslary::Config::loadFromYaml(root);
 
-    std::cout<<"again call LoggerMgr::getInstance()->toYamlString()... 反序列化"<<std::endl<<std::endl;
-    std::cout << "==========================" << std::endl;
-    std::cout << qslary::LoggerMgr::getInstance()->toYamlString() << std::endl<<std::endl;
-    std::cout << "==========================" << std::endl;
-    
-    std::cout<<root<<std::endl<<std::endl;
-    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
-    system_log->setFormatter("%d - %m%n");
-    QSLARY_LOG_INFO(system_log)<<"hello system"<<std::endl<<std::endl;
+  std::cout << "again call LoggerMgr::getInstance()->toYamlString()... 反序列化" << std::endl
+            << std::endl;
+  std::cout << "==========================" << std::endl;
+  std::cout << qslary::LoggerMgr::getInstance()->toYamlString() << std::endl
+            << std::endl;
+  std::cout << "==========================" << std::endl;
+
+  std::cout << root << std::endl
+            << std::endl;
+  QSLARY_LOG_INFO(system_log) << "hello system" << std::endl
+                              << std::endl;
+  system_log->setFormatter("%d - %m%n");
+  QSLARY_LOG_INFO(system_log) << "hello system" << std::endl
+                              << std::endl;
 }
 
+int main()
+{
 
-int main(){
-    
-    // QSLARY_LOG_INFO(QSLARY_LOG_ROOT())<<g_int_value_config->getValue();
-    // QSLARY_LOG_INFO(QSLARY_LOG_ROOT()) << g_int_value_config->toString();
-    // test_yaml();
+  // QSLARY_LOG_INFO(QSLARY_LOG_ROOT())<<g_int_value_config->getValue();
+  // QSLARY_LOG_INFO(QSLARY_LOG_ROOT()) << g_int_value_config->toString();
+  // test_yaml();
 
-    // test_config();
+  // test_config();
 
-    test_log();
-    return 0;
+  test_log();
+  return 0;
 }
 
 // void print_yaml(const YAML::Node &root, int level)

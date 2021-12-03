@@ -1,0 +1,7 @@
+logs:
+  - name: mutex
+    level: info
+    formatter: "%d%T%m%n"
+    appenders:
+      - type: FileLogAppender
+        file: mutex.txt
