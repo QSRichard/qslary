@@ -42,6 +42,78 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Object build statements for EXECUTABLE target test_iomanager
+
+
+#############################################
+# Order-only phony target for test_iomanager
+
+build cmake_object_order_depends_target_test_iomanager: phony || cmake_object_order_depends_target_qslary
+
+build CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o: CXX_COMPILER__test_iomanager ../tests/test_iomanager.cc || cmake_object_order_depends_target_test_iomanager
+  DEFINES = -D__FILE__=\"tests/test_iomanager.cc\"
+  DEP_FILE = CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o.d
+  FLAGS = -g
+  INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
+  OBJECT_DIR = CMakeFiles/test_iomanager.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_iomanager.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_iomanager
+
+
+#############################################
+# Link the executable ../bin/test_iomanager
+
+build ../bin/test_iomanager: CXX_EXECUTABLE_LINKER__test_iomanager CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
+  FLAGS = -g
+  LINK_FLAGS = -rdynamic
+  LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
+  LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
+  OBJECT_DIR = CMakeFiles/test_iomanager.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = ../bin/test_iomanager
+  TARGET_PDB = test_iomanager.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_scheduler
+
+
+#############################################
+# Order-only phony target for test_scheduler
+
+build cmake_object_order_depends_target_test_scheduler: phony || cmake_object_order_depends_target_qslary
+
+build CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o: CXX_COMPILER__test_scheduler ../tests/test_scheduler.cc || cmake_object_order_depends_target_test_scheduler
+  DEFINES = -D__FILE__=\"tests/test_scheduler.cc\"
+  DEP_FILE = CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o.d
+  FLAGS = -g
+  INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
+  OBJECT_DIR = CMakeFiles/test_scheduler.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_scheduler.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_scheduler
+
+
+#############################################
+# Link the executable ../bin/test_scheduler
+
+build ../bin/test_scheduler: CXX_EXECUTABLE_LINKER__test_scheduler CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
+  FLAGS = -g
+  LINK_FLAGS = -rdynamic
+  LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
+  LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
+  OBJECT_DIR = CMakeFiles/test_scheduler.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = ../bin/test_scheduler
+  TARGET_PDB = test_scheduler.dbg
+
+# =============================================================================
 # Object build statements for EXECUTABLE target test_fiber
 
 
@@ -53,7 +125,7 @@ build cmake_object_order_depends_target_test_fiber: phony || cmake_object_order_
 build CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o: CXX_COMPILER__test_fiber ../tests/test_fiber.cc || cmake_object_order_depends_target_test_fiber
   DEFINES = -D__FILE__=\"tests/test_fiber.cc\"
   DEP_FILE = CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/test_fiber.dir
   OBJECT_FILE_DIR = CMakeFiles/test_fiber.dir/tests
@@ -67,7 +139,7 @@ build CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o: CXX_COMPILER__test_fiber 
 # Link the executable ../bin/test_fiber
 
 build ../bin/test_fiber: CXX_EXECUTABLE_LINKER__test_fiber CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   LINK_FLAGS = -rdynamic
   LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
   LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
@@ -89,7 +161,7 @@ build cmake_object_order_depends_target_test_mutex: phony || cmake_object_order_
 build CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o: CXX_COMPILER__test_mutex ../tests/test_mutex.cc || cmake_object_order_depends_target_test_mutex
   DEFINES = -D__FILE__=\"tests/test_mutex.cc\"
   DEP_FILE = CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/test_mutex.dir
   OBJECT_FILE_DIR = CMakeFiles/test_mutex.dir/tests
@@ -103,7 +175,7 @@ build CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o: CXX_COMPILER__test_mutex 
 # Link the executable ../bin/test_mutex
 
 build ../bin/test_mutex: CXX_EXECUTABLE_LINKER__test_mutex CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   LINK_FLAGS = -rdynamic
   LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
   LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
@@ -136,7 +208,7 @@ build cmake_object_order_depends_target_test_thread: phony || cmake_object_order
 build CMakeFiles/test_thread.dir/tests/test_thread.cc.o: CXX_COMPILER__test_thread ../tests/test_thread.cc || cmake_object_order_depends_target_test_thread
   DEFINES = -D__FILE__=\"tests/test_thread.cc\"
   DEP_FILE = CMakeFiles/test_thread.dir/tests/test_thread.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/test_thread.dir
   OBJECT_FILE_DIR = CMakeFiles/test_thread.dir/tests
@@ -150,7 +222,7 @@ build CMakeFiles/test_thread.dir/tests/test_thread.cc.o: CXX_COMPILER__test_thre
 # Link the executable ../bin/test_thread
 
 build ../bin/test_thread: CXX_EXECUTABLE_LINKER__test_thread CMakeFiles/test_thread.dir/tests/test_thread.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   LINK_FLAGS = -rdynamic
   LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
   LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
@@ -172,7 +244,7 @@ build cmake_object_order_depends_target_test_config: phony || cmake_object_order
 build CMakeFiles/test_config.dir/tests/test_config.cc.o: CXX_COMPILER__test_config ../tests/test_config.cc || cmake_object_order_depends_target_test_config
   DEFINES = -D__FILE__=\"tests/test_config.cc\"
   DEP_FILE = CMakeFiles/test_config.dir/tests/test_config.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/test_config.dir
   OBJECT_FILE_DIR = CMakeFiles/test_config.dir/tests
@@ -186,7 +258,7 @@ build CMakeFiles/test_config.dir/tests/test_config.cc.o: CXX_COMPILER__test_conf
 # Link the executable ../bin/test_config
 
 build ../bin/test_config: CXX_EXECUTABLE_LINKER__test_config CMakeFiles/test_config.dir/tests/test_config.cc.o | ../lib/libqslary.so || ../lib/libqslary.so
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+  FLAGS = -g
   LINK_FLAGS = -rdynamic
   LINK_LIBRARIES = -Wl,-rpath,/home/liushui/Deps/yaml-cpp/lib:/home/liushui/workspace/qslary/lib  ../lib/libqslary.so  -lyaml-cpp  -lpthread
   LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
@@ -208,7 +280,7 @@ build cmake_object_order_depends_target_qslary: phony || CMakeFiles/qslary.dir
 build CMakeFiles/qslary.dir/qslary/logger.cc.o: CXX_COMPILER__qslary ../qslary/logger.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/logger.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/logger.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -216,7 +288,7 @@ build CMakeFiles/qslary.dir/qslary/logger.cc.o: CXX_COMPILER__qslary ../qslary/l
 build CMakeFiles/qslary.dir/qslary/config.cc.o: CXX_COMPILER__qslary ../qslary/config.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/config.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/config.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -224,7 +296,7 @@ build CMakeFiles/qslary.dir/qslary/config.cc.o: CXX_COMPILER__qslary ../qslary/c
 build CMakeFiles/qslary.dir/qslary/util.cc.o: CXX_COMPILER__qslary ../qslary/util.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/util.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/util.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -232,7 +304,7 @@ build CMakeFiles/qslary.dir/qslary/util.cc.o: CXX_COMPILER__qslary ../qslary/uti
 build CMakeFiles/qslary.dir/qslary/thread.cc.o: CXX_COMPILER__qslary ../qslary/thread.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/thread.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/thread.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -240,7 +312,7 @@ build CMakeFiles/qslary.dir/qslary/thread.cc.o: CXX_COMPILER__qslary ../qslary/t
 build CMakeFiles/qslary.dir/qslary/currenthread.cc.o: CXX_COMPILER__qslary ../qslary/currenthread.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/currenthread.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/currenthread.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -248,7 +320,7 @@ build CMakeFiles/qslary.dir/qslary/currenthread.cc.o: CXX_COMPILER__qslary ../qs
 build CMakeFiles/qslary.dir/qslary/Condition.cc.o: CXX_COMPILER__qslary ../qslary/Condition.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/Condition.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/Condition.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -256,7 +328,7 @@ build CMakeFiles/qslary.dir/qslary/Condition.cc.o: CXX_COMPILER__qslary ../qslar
 build CMakeFiles/qslary.dir/qslary/Exception.cc.o: CXX_COMPILER__qslary ../qslary/Exception.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/Exception.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/Exception.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -264,7 +336,7 @@ build CMakeFiles/qslary.dir/qslary/Exception.cc.o: CXX_COMPILER__qslary ../qslar
 build CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o: CXX_COMPILER__qslary ../qslary/CountDownLatch.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/CountDownLatch.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -272,7 +344,31 @@ build CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o: CXX_COMPILER__qslary ../
 build CMakeFiles/qslary.dir/qslary/Fiber.cc.o: CXX_COMPILER__qslary ../qslary/Fiber.cc || cmake_object_order_depends_target_qslary
   DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/Fiber.cc\"
   DEP_FILE = CMakeFiles/qslary.dir/qslary/Fiber.cc.o.d
-  FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC
+  FLAGS = -g -fPIC
+  INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
+  OBJECT_DIR = CMakeFiles/qslary.dir
+  OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
+
+build CMakeFiles/qslary.dir/qslary/Scheduler.cc.o: CXX_COMPILER__qslary ../qslary/Scheduler.cc || cmake_object_order_depends_target_qslary
+  DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/Scheduler.cc\"
+  DEP_FILE = CMakeFiles/qslary.dir/qslary/Scheduler.cc.o.d
+  FLAGS = -g -fPIC
+  INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
+  OBJECT_DIR = CMakeFiles/qslary.dir
+  OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
+
+build CMakeFiles/qslary.dir/qslary/IOManager.cc.o: CXX_COMPILER__qslary ../qslary/IOManager.cc || cmake_object_order_depends_target_qslary
+  DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/IOManager.cc\"
+  DEP_FILE = CMakeFiles/qslary.dir/qslary/IOManager.cc.o.d
+  FLAGS = -g -fPIC
+  INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
+  OBJECT_DIR = CMakeFiles/qslary.dir
+  OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
+
+build CMakeFiles/qslary.dir/qslary/Timer.cc.o: CXX_COMPILER__qslary ../qslary/Timer.cc || cmake_object_order_depends_target_qslary
+  DEFINES = -Dqslary_EXPORTS -D__FILE__=\"qslary/Timer.cc\"
+  DEP_FILE = CMakeFiles/qslary.dir/qslary/Timer.cc.o.d
+  FLAGS = -g -fPIC
   INCLUDES = -I../. -I/home/liushui/Deps/yaml-cpp/include
   OBJECT_DIR = CMakeFiles/qslary.dir
   OBJECT_FILE_DIR = CMakeFiles/qslary.dir/qslary
@@ -285,8 +381,8 @@ build CMakeFiles/qslary.dir/qslary/Fiber.cc.o: CXX_COMPILER__qslary ../qslary/Fi
 #############################################
 # Link the shared library ../lib/libqslary.so
 
-build ../lib/libqslary.so: CXX_SHARED_LIBRARY_LINKER__qslary CMakeFiles/qslary.dir/qslary/logger.cc.o CMakeFiles/qslary.dir/qslary/config.cc.o CMakeFiles/qslary.dir/qslary/util.cc.o CMakeFiles/qslary.dir/qslary/thread.cc.o CMakeFiles/qslary.dir/qslary/currenthread.cc.o CMakeFiles/qslary.dir/qslary/Condition.cc.o CMakeFiles/qslary.dir/qslary/Exception.cc.o CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o CMakeFiles/qslary.dir/qslary/Fiber.cc.o
-  LANGUAGE_COMPILE_FLAGS = -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g
+build ../lib/libqslary.so: CXX_SHARED_LIBRARY_LINKER__qslary CMakeFiles/qslary.dir/qslary/logger.cc.o CMakeFiles/qslary.dir/qslary/config.cc.o CMakeFiles/qslary.dir/qslary/util.cc.o CMakeFiles/qslary.dir/qslary/thread.cc.o CMakeFiles/qslary.dir/qslary/currenthread.cc.o CMakeFiles/qslary.dir/qslary/Condition.cc.o CMakeFiles/qslary.dir/qslary/Exception.cc.o CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o CMakeFiles/qslary.dir/qslary/Fiber.cc.o CMakeFiles/qslary.dir/qslary/Scheduler.cc.o CMakeFiles/qslary.dir/qslary/IOManager.cc.o CMakeFiles/qslary.dir/qslary/Timer.cc.o
+  LANGUAGE_COMPILE_FLAGS = -g
   LINK_PATH = -L/home/liushui/Deps/yaml-cpp/lib
   OBJECT_DIR = CMakeFiles/qslary.dir
   POST_BUILD = :
@@ -307,7 +403,11 @@ build test_config: phony ../bin/test_config
 
 build test_fiber: phony ../bin/test_fiber
 
+build test_iomanager: phony ../bin/test_iomanager
+
 build test_mutex: phony ../bin/test_mutex
+
+build test_scheduler: phony ../bin/test_scheduler
 
 build test_thread: phony ../bin/test_thread
 
@@ -319,7 +419,7 @@ build test_thread: phony ../bin/test_thread
 #############################################
 # Folder: /home/liushui/workspace/qslary/build
 
-build all: phony ../bin/test_fiber ../bin/test_mutex ../bin/test_thread ../bin/test_config ../lib/libqslary.so
+build all: phony ../bin/test_iomanager ../bin/test_scheduler ../bin/test_fiber ../bin/test_mutex ../bin/test_thread ../bin/test_config ../lib/libqslary.so
 
 # =============================================================================
 # Unknown Build Time Dependencies.
@@ -338,14 +438,14 @@ default all
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../cmake/utils.cmake /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../cmake/utils.cmake /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-C.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Clang-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt ../cmake/utils.cmake /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
+build ../CMakeLists.txt ../cmake/utils.cmake /usr/share/cmake-3.16/Modules/CMakeCInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /usr/share/cmake-3.16/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.16/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.16/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.16/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.16/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.16/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-C.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake-3.16/Modules/Compiler/Clang.cmake /usr/share/cmake-3.16/Modules/Compiler/GNU.cmake /usr/share/cmake-3.16/Modules/Internal/CMakeCheckCompilerFlag.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Clang-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.16/Modules/Platform/Linux.cmake /usr/share/cmake-3.16/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.16.3/CMakeCCompiler.cmake CMakeFiles/3.16.3/CMakeCXXCompiler.cmake CMakeFiles/3.16.3/CMakeSystem.cmake: phony
 
 
 #############################################

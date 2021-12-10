@@ -5,8 +5,8 @@ include (cmake/utils.cmake)
 
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
-# set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
+# set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
+set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
 set(LIB_SRC 
     qslary/logger.cc qslary/config.cc 
@@ -14,7 +14,9 @@ set(LIB_SRC
     qslary/currenthread.cc 
     qslary/Condition.cc 
     qslary/Exception.cc qslary/CountDownLatch.cc
-    qslary/Fiber.cc
+    qslary/Fiber.cc qslary/Scheduler.cc
+    qslary/IOManager.cc qslary/Timer.cc
+    # qslary/Timer.cc
 )
 
 
@@ -57,6 +59,17 @@ add_executable(test_fiber tests/test_fiber.cc)
 force_redefine_file_macro_for_sources(test_fiber)
 add_dependencies(test_fiber qslary)
 target_link_libraries(test_fiber qslary yaml-cpp pthread)
+
+add_executable(test_scheduler tests/test_scheduler.cc)
+force_redefine_file_macro_for_sources(test_scheduler)
+add_dependencies(test_scheduler qslary)
+target_link_libraries(test_scheduler qslary yaml-cpp pthread)
+
+
+add_executable(test_iomanager tests/test_iomanager.cc)
+force_redefine_file_macro_for_sources(test_iomanager)
+add_dependencies(test_iomanager qslary)
+target_link_libraries(test_iomanager qslary yaml-cpp pthread)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

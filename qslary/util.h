@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <cxxabi.h>
 #include <memory>
+#include <sys/time.h>
 #include <stdlib.h>
 namespace qslary
 {
@@ -15,6 +16,9 @@ namespace qslary
 
     pid_t getThreadId();
     uint64_t getFiberId();
+
+    std::uint64_t GetCurrentMs();
+    std::uint64_t GetCurrentUs();
 
     std::shared_ptr<char> cppDemangled(const char *abiName);
 

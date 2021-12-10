@@ -204,6 +204,7 @@ namespace qslary
     {
       m_latch.wait();
       assert(m_tid > 0);
+      // QSLARY_LOG_ERROR(QSLARY_LOG_ROOT()) << "staered..."<<qslary::CurrentThread::tid();
     }
   }
 

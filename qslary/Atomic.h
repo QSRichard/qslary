@@ -1,5 +1,16 @@
+/**
+ * @file Atomic.h
+ * @author qiao (1325726511@qq.com)
+ * @brief 
+ * @version 0.1
+ * @date 2021-12-04
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef __QSLARY_ATOMIC_H_
-#define __QSALRY_ATOMIC_H_
+#define __QSLARY_ATOMIC_H_
 
 #include "noncopyable.h"
 
@@ -77,4 +88,4 @@ namespace qslary
 
 } // namespace qslary end
 
-#endif // __QSALRY_ATOMIC_H_
+#endif // __QSLARY_ATOMIC_H_

@@ -7,5 +7,8 @@
 #include "qslary/singleton.h"
 #include "qslary/currenthread.h"
 #include "qslary/Fiber.h"
+#include "qslary/IOManager.h"
+// #include "Timer.h"
+#include "qslary/Scheduler.h"
 
 #endif

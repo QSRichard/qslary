@@ -1,79 +1,109 @@
 [
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -D__FILE__=\\\"tests/test_fiber.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o -c /home/liushui/workspace/qslary/tests/test_fiber.cc",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_iomanager.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o -c /home/liushui/workspace/qslary/tests/test_iomanager.cc",
+  "file": "/home/liushui/workspace/qslary/tests/test_iomanager.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_scheduler.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o -c /home/liushui/workspace/qslary/tests/test_scheduler.cc",
+  "file": "/home/liushui/workspace/qslary/tests/test_scheduler.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_fiber.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o -c /home/liushui/workspace/qslary/tests/test_fiber.cc",
   "file": "/home/liushui/workspace/qslary/tests/test_fiber.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -D__FILE__=\\\"tests/test_mutex.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o -c /home/liushui/workspace/qslary/tests/test_mutex.cc",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_mutex.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_mutex.dir/tests/test_mutex.cc.o -c /home/liushui/workspace/qslary/tests/test_mutex.cc",
   "file": "/home/liushui/workspace/qslary/tests/test_mutex.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -D__FILE__=\\\"tests/test_thread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/liushui/workspace/qslary/tests/test_thread.cc",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_thread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/liushui/workspace/qslary/tests/test_thread.cc",
   "file": "/home/liushui/workspace/qslary/tests/test_thread.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -D__FILE__=\\\"tests/test_config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_config.dir/tests/test_config.cc.o -c /home/liushui/workspace/qslary/tests/test_config.cc",
+  "command": "/usr/bin/clang++  -D__FILE__=\\\"tests/test_config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g   -o CMakeFiles/test_config.dir/tests/test_config.cc.o -c /home/liushui/workspace/qslary/tests/test_config.cc",
   "file": "/home/liushui/workspace/qslary/tests/test_config.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/logger.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/logger.cc.o -c /home/liushui/workspace/qslary/qslary/logger.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/logger.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/logger.cc.o -c /home/liushui/workspace/qslary/qslary/logger.cc",
   "file": "/home/liushui/workspace/qslary/qslary/logger.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/config.cc.o -c /home/liushui/workspace/qslary/qslary/config.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/config.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/config.cc.o -c /home/liushui/workspace/qslary/qslary/config.cc",
   "file": "/home/liushui/workspace/qslary/qslary/config.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/util.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/util.cc.o -c /home/liushui/workspace/qslary/qslary/util.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/util.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/util.cc.o -c /home/liushui/workspace/qslary/qslary/util.cc",
   "file": "/home/liushui/workspace/qslary/qslary/util.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/thread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/thread.cc.o -c /home/liushui/workspace/qslary/qslary/thread.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/thread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/thread.cc.o -c /home/liushui/workspace/qslary/qslary/thread.cc",
   "file": "/home/liushui/workspace/qslary/qslary/thread.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/currenthread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/currenthread.cc.o -c /home/liushui/workspace/qslary/qslary/currenthread.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/currenthread.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/currenthread.cc.o -c /home/liushui/workspace/qslary/qslary/currenthread.cc",
   "file": "/home/liushui/workspace/qslary/qslary/currenthread.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Condition.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Condition.cc.o -c /home/liushui/workspace/qslary/qslary/Condition.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Condition.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Condition.cc.o -c /home/liushui/workspace/qslary/qslary/Condition.cc",
   "file": "/home/liushui/workspace/qslary/qslary/Condition.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Exception.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Exception.cc.o -c /home/liushui/workspace/qslary/qslary/Exception.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Exception.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Exception.cc.o -c /home/liushui/workspace/qslary/qslary/Exception.cc",
   "file": "/home/liushui/workspace/qslary/qslary/Exception.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/CountDownLatch.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o -c /home/liushui/workspace/qslary/qslary/CountDownLatch.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/CountDownLatch.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/CountDownLatch.cc.o -c /home/liushui/workspace/qslary/qslary/CountDownLatch.cc",
   "file": "/home/liushui/workspace/qslary/qslary/CountDownLatch.cc"
 },
 
 {
   "directory": "/home/liushui/workspace/qslary/build",
-  "command": "/bin/x86_64-linux-gnu-g++-10  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Fiber.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include   -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Fiber.cc.o -c /home/liushui/workspace/qslary/qslary/Fiber.cc",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Fiber.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Fiber.cc.o -c /home/liushui/workspace/qslary/qslary/Fiber.cc",
   "file": "/home/liushui/workspace/qslary/qslary/Fiber.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Scheduler.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Scheduler.cc.o -c /home/liushui/workspace/qslary/qslary/Scheduler.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/Scheduler.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/IOManager.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/IOManager.cc.o -c /home/liushui/workspace/qslary/qslary/IOManager.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/IOManager.cc"
+},
+
+{
+  "directory": "/home/liushui/workspace/qslary/build",
+  "command": "/usr/bin/clang++  -Dqslary_EXPORTS -D__FILE__=\\\"qslary/Timer.cc\\\" -I../. -I/home/liushui/Deps/yaml-cpp/include  -g -fPIC   -o CMakeFiles/qslary.dir/qslary/Timer.cc.o -c /home/liushui/workspace/qslary/qslary/Timer.cc",
+  "file": "/home/liushui/workspace/qslary/qslary/Timer.cc"
 }
 ]

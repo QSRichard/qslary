@@ -14,7 +14,7 @@ void run_in_fiber()
 
 void thread_fun(){
   {
-    qslary::Fiber::GetThis();
+    qslary::Fiber::GetThreadCurrentFiber();
     QSLARY_LOG_INFO(g_logger) << "main begin";
     qslary::Fiber::ptr fiber(new qslary::Fiber(run_in_fiber));
     fiber->swapIn();
