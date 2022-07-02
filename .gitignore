@@ -1,3 +1,6 @@
 build/*
 bin/*
 staticlibDymatic/*
+Makefile
+compile_commands.json
+CMakeFiles/*
