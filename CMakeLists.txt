@@ -6,16 +6,19 @@ include (cmake/utils.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 # set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -g -std=c++11")
 set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
 set(LIB_SRC 
-    qslary/logger.cc qslary/config.cc 
-    qslary/util.cc qslary/thread.cc 
-    qslary/currenthread.cc 
-    qslary/Condition.cc 
-    qslary/Exception.cc qslary/CountDownLatch.cc
-    qslary/Fiber.cc qslary/Scheduler.cc
-    qslary/IOManager.cc qslary/Timer.cc
+    qslary/base/Logger.cc qslary/base/Config.cc 
+    qslary/base/util.cc qslary/base/Thread.cc 
+    qslary/base/CurrentThread.cc 
+    qslary/base/Condition.cc 
+    qslary/base/Exception.cc qslary/base/CountDownLatch.cc
+    qslary/base/Fiber.cc qslary/net/Scheduler.cc
+    qslary/net/IOManager.cc 
+    qslary/net/Timer.cc
+    qslary/net/Timestamp.cc
     # qslary/Timer.cc
 )
 
@@ -37,28 +40,27 @@ force_redefine_file_macro_for_sources(qslary)
 # add_dependencies(test qslary)
 # target_link_libraries(test qslary)
 
-add_executable(test_config tests/test_config.cc)
-force_redefine_file_macro_for_sources(test_config)
-add_dependencies(test_config qslary)
-target_link_libraries(test_config qslary yaml-cpp pthread)
+# add_executable(test_config tests/test_config.cc)
+# force_redefine_file_macro_for_sources(test_config)
+# add_dependencies(test_config qslary)
+# target_link_libraries(test_config qslary yaml-cpp pthread)
 
 
+# add_executable(test_thread tests/test_thread.cc)
+# force_redefine_file_macro_for_sources(test_thread)
+# add_dependencies(test_thread qslary)
+# target_link_libraries(test_thread qslary yaml-cpp pthread)
 
-add_executable(test_thread tests/test_thread.cc)
-force_redefine_file_macro_for_sources(test_thread)
-add_dependencies(test_thread qslary)
-target_link_libraries(test_thread qslary yaml-cpp pthread)
 
+# add_executable(test_mutex tests/test_mutex.cc)
+# force_redefine_file_macro_for_sources(test_mutex)
+# add_dependencies(test_mutex qslary)
+# target_link_libraries(test_mutex qslary yaml-cpp pthread)
 
-add_executable(test_mutex tests/test_mutex.cc)
-force_redefine_file_macro_for_sources(test_mutex)
-add_dependencies(test_mutex qslary)
-target_link_libraries(test_mutex qslary yaml-cpp pthread)
-
-add_executable(test_fiber tests/test_fiber.cc)
-force_redefine_file_macro_for_sources(test_fiber)
-add_dependencies(test_fiber qslary)
-target_link_libraries(test_fiber qslary yaml-cpp pthread)
+# add_executable(test_fiber tests/test_fiber.cc)
+# force_redefine_file_macro_for_sources(test_fiber)
+# add_dependencies(test_fiber qslary)
+# target_link_libraries(test_fiber qslary yaml-cpp pthread)
 
 add_executable(test_scheduler tests/test_scheduler.cc)
 force_redefine_file_macro_for_sources(test_scheduler)

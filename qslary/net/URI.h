@@ -23,8 +23,7 @@ public:
   const std::string& getPath() const;
   const std::string& getQuery() const {return query_;}
   const std::string& getFragment() const { return fragment_; }
-  int32_t getPort() const;
-  
+  int32_t GetPort() const;
 
   void setScheme(const std::string& scheme)  {  scheme_=scheme; }
   void setUserinfo(const std::string& userinfo)  { userinfo_=userinfo; }
@@ -32,7 +31,7 @@ public:
   void setPath(const std::string& path)  { path_=path; }
   void setQuery(const std::string& query)  { query_=query; }
   void setFragment(const std::string& fragment) { fragment_ = fragment; }
-  void setPort(int32_t port) { port_ = port; }
+  void SetPort(int32_t port) { port_ = port; }
 
   std::ostream& dump(std::ostream& os) const;
   std::string toString() const;

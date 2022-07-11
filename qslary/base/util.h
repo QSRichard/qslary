@@ -17,8 +17,8 @@ namespace qslary
     pid_t getThreadId();
     uint64_t getFiberId();
 
-    std::uint64_t GetCurrentMs();
-    std::uint64_t GetCurrentUs();
+    uint64_t GetCurrentMs();
+    uint64_t GetCurrentUs();
 
     std::shared_ptr<char> cppDemangled(const char *abiName);
 

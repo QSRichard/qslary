@@ -73,11 +73,7 @@ public:
 
   uint64_t getSendTimeout() const;
   uint64_t getRecvTimeout() const;
-  int getFamily() const
-  {
-    return family_;
-  }
-
+  int GetFamily() const { return family_; }
 
   int getType() const
   {

@@ -16,11 +16,12 @@ class Scheduler;
 
 class Fiber : public std::enable_shared_from_this<Fiber> {
   friend class Scheduler;
+private:
+  Fiber();
 
  public:
   typedef std::shared_ptr<Fiber> ptr;
   enum State { INIT, HOLD, EXEC, TERM, READY, EXCEPTION };
-  Fiber();
   explicit Fiber(std::function<void()> cb, size_t stacksize = 0);
   ~Fiber();
 
@@ -64,7 +65,7 @@ class Fiber : public std::enable_shared_from_this<Fiber> {
 
   static uint64_t getFiberId();
 
-  static void FiberExecuteCallerBackFunction();
+  static void FiberRun();
   static void CallMainFunc();
 
 public:

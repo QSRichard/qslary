@@ -5,16 +5,16 @@
 namespace qslary {
 
 class noncopyable {
- public:
-  noncopyable(const noncopyable&) = delete;
-  void operator=(const noncopyable&) = delete;
-  noncopyable(const noncopyable&&) = delete;
+  public:
+  noncopyable(const noncopyable &) = delete;
+  void operator=(const noncopyable &) = delete;
+  noncopyable(const noncopyable &&) = delete;
 
- protected:
+  protected:
   noncopyable() = default;
   ~noncopyable() = default;
 };
 
-}  // namespace qslary
+} // namespace qslary
 
 #endif

@@ -16,15 +16,16 @@ namespace qslary
       return qslary::Fiber::getFiberId();
     }
 
-    uint64_t GetCurrentMs(){
-
+    uint64_t GetCurrentMs()
+    {
       struct timeval tv;
       gettimeofday(&tv, NULL);
       return tv.tv_sec*1000+tv.tv_usec;
     }
 
 
-  uint64_t GetCurrentUs(){
+  uint64_t GetCurrentUs()
+  {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_usec*1000*1000+tv.tv_usec*1000;

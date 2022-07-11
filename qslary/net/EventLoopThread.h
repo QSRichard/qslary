@@ -13,30 +13,29 @@ namespace qslary
 
 class EventLoop;
 
-class EventLoopThread:public noncopyable
+class EventLoopThread : public noncopyable
 {
 public:
-  typedef std::shared_ptr<EventLoopThread> ptr;
-  typedef std::function<void(EventLoop*)> ThreadInitCallback;
+    typedef std::shared_ptr<EventLoopThread> ptr;
+    typedef std::function<void(EventLoop *)> ThreadInitCallback;
 
-  EventLoopThread(const ThreadInitCallback& cb = ThreadInitCallback(), const std::string& name = std::string());
+    EventLoopThread(const ThreadInitCallback &cb = ThreadInitCallback(),
+                    const std::string &name = std::string());
 
-  ~EventLoopThread();
+    ~EventLoopThread();
 
-  EventLoop* startLoop();
+    EventLoop *startLoop();
 
 private:
-  void threadFunc();
-  MutexLock mutex_;
-  EventLoop* loop_;
-  bool exiting_;
-  Thread thread_;
-  Condition cond_;
-  ThreadInitCallback callback_;
-
+    void threadFunc();
+    MutexLock mutex_;
+    EventLoop *loop_;
+    bool exiting_;
+    Thread thread_;
+    Condition cond_;
+    ThreadInitCallback callback_;
 };
 
-}
-
+} // namespace qslary
 
 #endif

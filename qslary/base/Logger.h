@@ -24,14 +24,14 @@
           qslary::CurrentThread::name())))                                     \
       .getSS()
 
-#define QSLARY_LOG_DEBUG(logger) \
+#define QSLARY_LOG_DEBUG(logger)                                               \
   QSLARY_LOG_LEVEL(logger, qslary::LogLevel::DEBUG)
 #define QSLARY_LOG_INFO(logger) QSLARY_LOG_LEVEL(logger, qslary::LogLevel::INFO)
-#define QSLARY_LOG_WARING(logger) \
+#define QSLARY_LOG_WARING(logger)                                              \
   QSLARY_LOG_LEVEL(logger, qslary::LogLevel::WARING)
-#define QSLARY_LOG_ERROR(logger) \
+#define QSLARY_LOG_ERROR(logger)                                               \
   QSLARY_LOG_LEVEL(logger, qslary::LogLevel::ERROR)
-#define QSLARY_LOG_FATAL(logger) \
+#define QSLARY_LOG_FATAL(logger)                                               \
   QSLARY_LOG_LEVEL(logger, qslary::LogLevel::FATAL)
 
 #define QSLARY_LOG_ROOT() qslary::LoggerMgr::getInstance()->getRoot()
@@ -42,7 +42,7 @@ class Logger;
 class LogManger;
 
 class LogLevel {
- public:
+  public:
   enum Level {
     UNKONW = 0,
     DEBUG = 1,
@@ -55,7 +55,7 @@ class LogLevel {
   static LogLevel::Level FromString(const std::string &str);
 };
 class LogEvent {
- public:
+  public:
   typedef std::shared_ptr<LogEvent> ptr;
   LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
            const char *file, uint32_t line, uint32_t elpase, uint32_t threadId,
@@ -73,14 +73,14 @@ class LogEvent {
   LogLevel::Level getLevel() const { return m_level; };
   std::stringstream &getSS() { return m_ss; };
 
- private:
-  const char *m_file = nullptr;  // 文件名
-  uint32_t m_line = 0;           // 行号
-  uint32_t m_elpase = 0;         // 毫秒数
-  uint32_t m_thread_id = 0;      // 线程id
-  uint32_t m_fiber_id = 0;       // 协程id
-  uint64_t m_time;               // 时间戳
-  std::string thread_name_;      // 线程名称
+  private:
+  const char *m_file = nullptr; // 文件名
+  uint32_t m_line = 0;          // 行号
+  uint32_t m_elpase = 0;        // 毫秒数
+  uint32_t m_thread_id = 0;     // 线程id
+  uint32_t m_fiber_id = 0;      // 协程id
+  uint64_t m_time;              // 时间戳
+  std::string thread_name_;     // 线程名称
   std::string m_content;
   std::stringstream m_ss;
   // TAG 注意Logger类在LogEvent之后
@@ -90,17 +90,17 @@ class LogEvent {
 };
 
 class LogEventWarp {
- public:
+  public:
   LogEventWarp(LogEvent::ptr event);
   ~LogEventWarp();
   std::stringstream &getSS();
 
- private:
+  private:
   LogEvent::ptr m_event;
 };
 
 class LoggerFormatter {
- public:
+  public:
   typedef std::shared_ptr<LoggerFormatter> ptr;
   LoggerFormatter(const std::string &partten);
   std::string format(std::shared_ptr<Logger> logger, LogLevel::Level level,
@@ -109,9 +109,9 @@ class LoggerFormatter {
   void setPartten(std::string &val) { m_partten = val; };
   std::string getPartten() const { return m_partten; };
 
- public:
+  public:
   class FormatItem {
-   public:
+public:
     typedef std::shared_ptr<FormatItem> ptr;
     virtual ~FormatItem(){};
     virtual void format(std::ostream &os, std::shared_ptr<Logger> logger,
@@ -120,7 +120,7 @@ class LoggerFormatter {
 
   bool isError() const { return m_error == true; };
 
- private:
+  private:
   std::string m_partten;
   std::vector<FormatItem::ptr> m_items;
   bool m_error = false;
@@ -130,7 +130,7 @@ class LoggerFormatter {
 class LoggerAppender {
   friend class Logger;
 
- public:
+  public:
   typedef std::shared_ptr<LoggerAppender> ptr;
   typedef qslary::MutexLock MutexType;
   // FIXME LoggerAppender 的构造析构函数 以及子类的构造析构函数
@@ -150,7 +150,7 @@ class LoggerAppender {
 
   LogLevel::Level getLevel() { return m_level; };
 
- protected:
+  protected:
   /// 日志级别
   LoggerFormatter::ptr m_formater;
   /// 是否有自己的日志格式器
@@ -163,7 +163,7 @@ class LoggerAppender {
 };
 
 class StdoutLogAppender : public LoggerAppender {
- public:
+  public:
   typedef std::shared_ptr<StdoutLogAppender> ptr;
   virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level,
                    LogEvent::ptr event) override;
@@ -171,7 +171,7 @@ class StdoutLogAppender : public LoggerAppender {
 };
 
 class FileLogAppender : public LoggerAppender {
- public:
+  public:
   typedef std::shared_ptr<FileLogAppender> ptr;
   FileLogAppender(const std::string &filename);
 
@@ -181,7 +181,7 @@ class FileLogAppender : public LoggerAppender {
 
   bool reopen();
 
- public:
+  public:
   // std::string m_name;
   std::string m_filename;
   std::ofstream m_filestream;
@@ -192,7 +192,7 @@ class FileLogAppender : public LoggerAppender {
 class Logger : public std::enable_shared_from_this<Logger> {
   friend class LogManger;
 
- public:
+  public:
   typedef std::shared_ptr<Logger> ptr;
   typedef qslary::MutexLock MutexType;
 
@@ -216,7 +216,7 @@ class Logger : public std::enable_shared_from_this<Logger> {
   LoggerFormatter::ptr getFormatter();
   std::string toYamlString();
 
- private:
+  private:
   std::string m_name;
   LogLevel::Level m_level;
 
@@ -227,7 +227,7 @@ class Logger : public std::enable_shared_from_this<Logger> {
 };
 
 class LogManger {
- public:
+  public:
   typedef qslary::MutexLock MutexType;
   LogManger();
   Logger::ptr getLogger(const std::string &name);
@@ -235,7 +235,7 @@ class LogManger {
   Logger::ptr getRoot() const { return m_root; };
   std::string toYamlString();
 
- private:
+  private:
   MutexType mutex_;
   std::map<std::string, Logger::ptr> m_loggers;
 
@@ -243,6 +243,6 @@ class LogManger {
 };
 
 typedef qslary::Singleton<LogManger> LoggerMgr;
-}  // namespace qslary
+} // namespace qslary
 
 #endif

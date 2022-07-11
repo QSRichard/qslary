@@ -138,7 +138,7 @@ tr489:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -147,7 +147,7 @@ tr493:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -200,7 +200,7 @@ tr566:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -215,7 +215,7 @@ tr570:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -363,7 +363,7 @@ tr490:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -372,7 +372,7 @@ tr494:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -453,7 +453,7 @@ tr492:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -462,7 +462,7 @@ tr496:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -515,7 +515,7 @@ tr569:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -530,7 +530,7 @@ tr573:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -5532,7 +5532,7 @@ tr567:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -5552,7 +5552,7 @@ tr571:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -10618,7 +10618,7 @@ case 560:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -10725,7 +10725,7 @@ case 560:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -10749,7 +10749,7 @@ case 560:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -10783,7 +10783,7 @@ case 560:
 #line 28 "uri.rl"
 	{
         if (p != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -10894,7 +10894,8 @@ const std::string& URI::getPath() const {
     return path_.empty() ? s_default_path : path_;
 }
 
-int32_t URI::getPort() const {
+int32_t URI::GetPort() const
+{
     if(port_) {
         return port_;
     }
@@ -10933,8 +10934,8 @@ IPAddress::ptr URI::createAddress() const {
     if (!addr.empty())
     {
       std::cout<<"hhhhhhhhhhhhhhhh"<<std::endl;
-        addr[0]->setPort(getPort());
-        return addr[0];
+      addr[0]->SetPort(GetPort());
+      return addr[0];
     }
     return nullptr;
 }

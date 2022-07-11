@@ -21,13 +21,13 @@ static qslary::Logger::ptr g_logger = QSLARY_LOG_NAME("system");
 
 Socket::ptr Socket::CreateTCPSocket(qslary::Address::ptr addr)
 {
-  Socket::ptr sock(new Socket(addr->getFamily(), SOCK_STREAM, 0));
-  return sock;
+    Socket::ptr sock(new Socket(addr->GetFamily(), SOCK_STREAM, 0));
+    return sock;
 }
 Socket::ptr Socket::CreateUDPSocket(qslary::Address::ptr addr)
 {
-  Socket::ptr sock(new Socket(addr->getFamily(), SOCK_DGRAM, 0));
-  return sock;
+    Socket::ptr sock(new Socket(addr->GetFamily(), SOCK_DGRAM, 0));
+    return sock;
 }
 
 Socket::ptr Socket::CreateTCPSocket()
@@ -141,12 +141,12 @@ bool Socket::bind(const Address::ptr addr)
 {
   if (!isVaild())
     newSock();
-  if (addr->getFamily() != family_)
+  if (addr->GetFamily() != family_)
   {
     QSLARY_LOG_ERROR(g_logger) << "bind family nonequall error";
     return false;
   }
-  if (::bind(socketfd_, addr->getAddr(), addr->getAddrLen()))
+  if (::bind(socketfd_, addr->GetAddr(), addr->GetAddrLen()))
   {
     QSLARY_LOG_ERROR(g_logger)<<"::bind error errno "<<errno<<" errnostr "<<strerror(errno);
     return false;
@@ -165,22 +165,23 @@ bool Socket::connect(const Address::ptr addr, uint64_t timeout_ms)
     return false;
   }
 
-  if (QSLARY_UNLICKLY(addr->getFamily() != family_))
+  if (QSLARY_UNLICKLY(addr->GetFamily() != family_))
   {
     QSLARY_LOG_ERROR(g_logger) << "bind family nonequall error";
     return false;
   }
   if (timeout_ms == (uint64_t)(-1))
   {
-    if (::connect(socketfd_, addr->getAddr(), addr->getAddrLen()))
-    {
-      QSLARY_LOG_ERROR(g_logger) << "sock = " << socketfd_ << " connect error errno = " << errno << "error str "
-                                 << strerror(errno);
-      close();
-      return false;
+      if (::connect(socketfd_, addr->GetAddr(), addr->GetAddrLen()))
+      {
+          QSLARY_LOG_ERROR(g_logger)
+              << "sock = " << socketfd_ << " connect error errno = " << errno
+              << "error str " << strerror(errno);
+          close();
+          return false;
     }
   }
-  else if (::connect(socketfd_, addr->getAddr(), addr->getAddrLen()))
+  else if (::connect(socketfd_, addr->GetAddr(), addr->GetAddrLen()))
   {
     QSLARY_LOG_ERROR(g_logger) << "sock = " << socketfd_ << " connect error errno = " << errno << "error str "
                                << strerror(errno);
@@ -242,7 +243,8 @@ int Socket::send(const iovec* buffers, size_t length, int flags)
 int Socket::sendTo(const void* buffer, size_t length, const Address::ptr to, int flags)
 {
   if (isConnected())
-    return ::sendto(socketfd_, buffer, length, flags, to->getAddr(), to->getAddrLen());
+      return ::sendto(socketfd_, buffer, length, flags, to->GetAddr(),
+                      to->GetAddrLen());
   return -1;
 }
 int Socket::sendTo(const iovec* buffers, size_t length, const Address::ptr to, int flags)
@@ -253,8 +255,8 @@ int Socket::sendTo(const iovec* buffers, size_t length, const Address::ptr to, i
     std::memset(&msg, 0, sizeof(msg));
     msg.msg_iov = (iovec*)buffers;
     msg.msg_iovlen = length;
-    msg.msg_name = to->getAddr();
-    msg.msg_namelen = to->getAddrLen();
+    msg.msg_name = to->GetAddr();
+    msg.msg_namelen = to->GetAddrLen();
     return ::sendmsg(socketfd_,&msg,flags);
   }
   return -1;
@@ -284,8 +286,9 @@ int Socket::recvFrom(void* buffer, size_t length, Address::ptr from, int flags)
   if (isConnected())
   {
     // revcfrom 的最后一个参数需要一个socklen_t 的地址 因此需要在此定义一个变量
-    socklen_t len = from->getAddrLen();
-    return ::recvfrom(socketfd_, buffer, length, flags, const_cast<sockaddr*>(from->getAddr()),&len);
+    socklen_t len = from->GetAddrLen();
+    return ::recvfrom(socketfd_, buffer, length, flags,
+                      const_cast<sockaddr *>(from->GetAddr()), &len);
   }
   return -1;
 }
@@ -298,8 +301,8 @@ int Socket::recvFrom(iovec* buffers, size_t length, Address::ptr from, int flags
     std::memset(&msg, 0, sizeof(msg));
     msg.msg_iovlen = length;
     msg.msg_iov = buffers;
-    msg.msg_name = const_cast<sockaddr*>(from->getAddr());
-    msg.msg_namelen = from->getAddrLen();
+    msg.msg_name = const_cast<sockaddr *>(from->GetAddr());
+    msg.msg_namelen = from->GetAddrLen();
     return ::recvmsg(socketfd_, &msg, flags);
   }
   return -1;
@@ -325,8 +328,9 @@ Address::ptr Socket::getRemoteAddress()
     assert(false);
   }
 
-  socklen_t addrlen = result->getAddrLen();
-  if (getpeername(socketfd_, const_cast<sockaddr*>(result->getAddr()), &addrlen))
+  socklen_t addrlen = result->GetAddrLen();
+  if (getpeername(socketfd_, const_cast<sockaddr *>(result->GetAddr()),
+                  &addrlen))
   {
     QSLARY_LOG_ERROR(g_logger) << "getpeername error sock = " << socketfd_ << " errno " << errno << " str errno "
                                << strerror(errno);
@@ -361,8 +365,9 @@ Address::ptr Socket::getLocalAddress()
     assert(false);
   }
 
-  socklen_t addrlen = result->getAddrLen();
-  if (getsockname(socketfd_, const_cast<sockaddr*>(result->getAddr()), &addrlen))
+  socklen_t addrlen = result->GetAddrLen();
+  if (getsockname(socketfd_, const_cast<sockaddr *>(result->GetAddr()),
+                  &addrlen))
   {
     QSLARY_LOG_ERROR(g_logger) << "getsockname error sock = " << socketfd_ << " errno " << errno << " str errno "
                                << strerror(errno);

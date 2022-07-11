@@ -4,3 +4,4 @@ staticlibDymatic/*
 Makefile
 compile_commands.json
 CMakeFiles/*
+lib/*

@@ -27,7 +27,7 @@ namespace qslary {
     action save_port
     {
         if (fpc != mark) {
-            uri->setPort(atoi(mark));
+            uri->SetPort(atoi(mark));
         }
         mark = NULL;
     }
@@ -171,7 +171,7 @@ const std::string& URI::getPath() const {
     return path_.empty() ? s_default_path : path_;
 }
 
-int32_t URI::getPort() const {
+int32_t URI::GetPort() const {
     if(port_) {
         return port_;
     }
@@ -208,7 +208,7 @@ std::string URI::toString() const {
 IPAddress::ptr URI::createAddress() const {
     auto addr =IPAddress::HostNameToAddress(host_);
     if(!addr.empty()) {
-        addr[0]->setPort(getPort());
+        addr[0]->SetPort(GetPort());
         return addr[0];
     }
     return nullptr;

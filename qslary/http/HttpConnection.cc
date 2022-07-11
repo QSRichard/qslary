@@ -477,7 +477,7 @@ HttpConnection::ptr HttpConnectionPool::getConnection()
     {
       return nullptr;
     }
-    addr->setPort(port_);
+    addr->SetPort(port_);
     Socket::ptr sock = Socket::CreateTCPSocket(addr);
     if (!sock)
     {
@@ -682,7 +682,7 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpRequest::ptr req, uint64_t tim
 //       std::cout << "get Addr fail " << host_ << std::endl;
 //     }
 //     auto addr = addrs[0];
-//     addr->setPort(port_);
+//     addr->SetPort(port_);
 //     Socket::ptr sock = Socket::CreateTCPSocket(addr);
 //     if (!sock)
 //     {
@@ -694,7 +694,8 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpRequest::ptr req, uint64_t tim
 //     }
 //     ++total_;
 //   }
-//   return HttpConnection::ptr(ptr, std::bind(&HttpConnectionPool::ReleasePtr, std::placeholders::_1, this));
+//   return HttpConnection::ptr(ptr, std::bind(&HttpConnectionPool::ReleasePtr,
+//   std::placeholders::_1, this));
 // }
 
 // HttpResult::ptr HttpConnectionPool::doGet(const std::string& url, uint64_t timeout,

@@ -34,6 +34,7 @@ uint64_t Fiber::getFiberId() {
   if (thread_current_fiber) {
     return thread_current_fiber->getId();
   }
+  // FIXME 0 是否合法
   return 0;
 }
 
@@ -50,62 +51,77 @@ void Fiber::SetThreadCurrentFiber(Fiber* f) { thread_current_fiber = f; }
  * @return Fiber::ptr
  */
 Fiber::ptr Fiber::GetThreadCurrentFiber() {
-  if (thread_current_fiber) {
+  if (thread_current_fiber) 
+  {
     return thread_current_fiber->shared_from_this();
   }
   Fiber::ptr main_fiber(new Fiber);
+  // FIXME assert 放在这里可以吗
   assert(thread_current_fiber == main_fiber.get());
   thread_main_fiber = main_fiber;
   return thread_current_fiber->shared_from_this();
 }
 
-Fiber::Fiber() {
+// 每次创建Fiber时都会将当前Fiber置为线程当前Fiber
+Fiber::Fiber() 
+{
   state_ = State::EXEC;
   SetThreadCurrentFiber(this);
-  if (getcontext(&ctx_)) {
+  if (getcontext(&ctx_)) 
+  {
     QSLARY_LOG_ERROR(g_logger) << "getcontext error";
   }
   id_=++s_fiber_id;
   s_fiber_count++;
+  QSLARY_LOG_ERROR(g_logger) << "Fiber::Fiber main";
 }
 
 Fiber::Fiber(std::function<void()> cb, size_t stacksize)
-    : id_(++s_fiber_id), cb_(cb){
+    : id_(++s_fiber_id), cb_(cb)
+{
   ++s_fiber_count;
   stacksize_ = stacksize ? stacksize : g_fiber_stack_size->getValue();
   stack_ = StackAllocator::Alloc(stacksize_);
-  if (getcontext(&ctx_)) {
+  if (getcontext(&ctx_)) 
+  {
     QSLARY_LOG_ERROR(g_logger) << "getcontext error";
   }
   ctx_.uc_link = nullptr;
   ctx_.uc_stack.ss_sp = stack_;
   ctx_.uc_stack.ss_size = stacksize_;
-  makecontext(&ctx_, &Fiber::FiberExecuteCallerBackFunction, 0);
+  makecontext(&ctx_, &Fiber::FiberRun, 0);
 }
 
-Fiber::~Fiber() {
+Fiber::~Fiber() 
+{
   --s_fiber_count;
-  if (stack_) {
+  if (stack_) 
+  {
     assert(state_ == State::TERM || state_ == State::INIT ||
            state_ == State::EXCEPTION);
 
     StackAllocator::Dealloc(stack_, stacksize_);
-  } else {
+  } 
+  else 
+  {
     assert(!cb_);
     assert(state_ == State::EXEC);
     Fiber* cur = thread_current_fiber;
-    if (cur == this) {
+    if (cur == this) 
+    {
       SetThreadCurrentFiber(nullptr);
     }
   }
 }
 
 // 切换到当前协程执行
-void Fiber::swapIn() {
+void Fiber::swapIn() 
+{
   SetThreadCurrentFiber(this);
   assert(state_ != State::EXEC);
   state_ = State::EXEC;
-  if (swapcontext(&(Scheduler::GetSchedulerFirstFiber()->ctx_), &ctx_)) {
+  if (swapcontext(&(Scheduler::GetSchedulerFirstFiber()->ctx_), &ctx_)) 
+  {
     QSLARY_LOG_ERROR(g_logger) << "swapcontext error";
   }
 }
@@ -116,30 +132,35 @@ void Fiber::swapOut()
 {
 
   SetThreadCurrentFiber(Scheduler::GetSchedulerFirstFiber());
-  if (swapcontext(&ctx_, &(Scheduler::GetSchedulerFirstFiber()->ctx_))) {
+  if (swapcontext(&ctx_, &(Scheduler::GetSchedulerFirstFiber()->ctx_))) 
+  {
     QSLARY_LOG_ERROR(g_logger) << "swapcontext error";
   }
 }
 
 // 处于INIT或TERM或EXCEPTION状态时 重置协程函数 并重置状态
-void Fiber::reset(std::function<void()> cb) {
+void Fiber::reset(std::function<void()> cb) 
+{
   assert(stack_);
   assert(state_ == State::TERM || state_ == State::EXCEPTION ||
          state_ == State::INIT);
 
   cb_ = cb;
-  if (getcontext(&ctx_)) {
+  if (getcontext(&ctx_)) 
+  {
     QSLARY_LOG_ERROR(g_logger) << "getcontext error";
   }
+  // FIXME 这里ctx.uc_link 设置为nullptr 没有问题吗
   ctx_.uc_link = nullptr;
   ctx_.uc_stack.ss_sp = stack_;
   ctx_.uc_stack.ss_size = stacksize_;
-  makecontext(&ctx_, &Fiber::FiberExecuteCallerBackFunction, 0);
+  makecontext(&ctx_, &Fiber::FiberRun, 0);
   state_ = State::INIT;
 }
 
 // 协程切换到后台，并且设置为Ready状态
-void Fiber::YieldToReady() {
+void Fiber::YieldToReady() 
+{
   Fiber::ptr cur = GetThreadCurrentFiber();
   assert(cur->state_ == State::EXEC);
   cur->state_ = State::READY;
@@ -147,34 +168,39 @@ void Fiber::YieldToReady() {
 }
 
 // 协程切换到后台，并且设置Hold状态
-void Fiber::YieldToHold() {
+void Fiber::YieldToHold() 
+{
   Fiber::ptr cur = GetThreadCurrentFiber();
   assert(cur->state_ == State::EXEC);
   cur->state_ = HOLD;
   cur->swapOut();
 }
 
-
-void Fiber::FiberExecuteCallerBackFunction()
+void Fiber::FiberRun()
 {
-  Fiber::ptr cur = GetThreadCurrentFiber();
-  assert(cur);
-  try {
-    cur->cb_();
-    cur->cb_ = nullptr;
-    cur->state_ = State::TERM;
-  } catch (std::exception& ex) {
-    cur->state_ = State::EXCEPTION;
+
+  Fiber::ptr fiber = GetThreadCurrentFiber();
+  assert(fiber);
+  try 
+  {
+    fiber->cb_();
+    fiber->cb_ = nullptr;
+    fiber->state_ = State::TERM;
+  } 
+  catch (std::exception& ex) 
+  {
+    fiber->state_ = State::EXCEPTION;
     std::cout << qslary::CurrentThread::stackTrace(true)<<std::endl;
     QSLARY_LOG_ERROR(g_logger) << "Fiber::MainFunc exception";
-
-  } catch (...) {
-    cur->state_ = State::EXCEPTION;
+  } 
+  catch (...) 
+  {
+    fiber->state_ = State::EXCEPTION;
     QSLARY_LOG_ERROR(g_logger) << "Fiber::MainFunc exception";
   }
 
-  auto raw_ptr = cur.get();
-  cur.reset();
+  auto raw_ptr = fiber.get();
+  fiber.reset();
   raw_ptr->swapOut();
   std::cout << " never occur reach" << std::endl;
 }
@@ -183,6 +209,5 @@ uint64_t Fiber::TotalFibers()
 {
   return s_fiber_count;
 }
-
 
 }  // namespace qslary
