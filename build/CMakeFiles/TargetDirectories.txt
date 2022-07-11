@@ -1,9 +1,0 @@
-/home/liushui/workspace/qslary/build/CMakeFiles/rebuild_cache.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_iomanager.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_scheduler.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_fiber.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_mutex.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/edit_cache.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_thread.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/test_config.dir
-/home/liushui/workspace/qslary/build/CMakeFiles/qslary.dir
