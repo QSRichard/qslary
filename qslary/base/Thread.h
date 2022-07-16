@@ -6,17 +6,16 @@
 
 #include <functional>
 #include <memory>
-#include <thread>
-#include <string>
 #include <pthread.h>
 #include <semaphore.h>
+#include <string>
+#include <thread>
 namespace qslary
 {
 
-
-  class Thread : noncopyable
-  {
-  public:
+class Thread : noncopyable
+{
+public:
     typedef std::shared_ptr<Thread> ptr;
     typedef std::function<void()> ThreadFunc;
 
@@ -31,7 +30,7 @@ namespace qslary
 
     // static const std::string &getThreadName();
 
-  private:
+private:
     void setDefaultName();
 
     pthread_t pthreadId_;
@@ -44,8 +43,7 @@ namespace qslary
     bool joined_;
 
     static AtomicInt64 threadNum; // 创建的线程数量
-
-  };
-}
+};
+} // namespace qslary
 
 #endif

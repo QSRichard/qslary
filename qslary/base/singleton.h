@@ -3,27 +3,25 @@
 #include <memory>
 namespace qslary
 {
-  template <class T, class X = void, int N = 0>
-  class Singleton
-  {
-  public:
+template <class T, class X = void, int N = 0> class Singleton
+{
+public:
     static T *getInstance()
     {
-      static T v;
-      return &v;
+        static T v;
+        return &v;
     }
-  };
-  template <class T, class X = void, int N = 0>
-  class SingletonPtr
-  {
+};
+template <class T, class X = void, int N = 0> class SingletonPtr
+{
 
-  public:
+public:
     static std::shared_ptr<T> getInstance()
     {
-      static std::shared_ptr<T> v(new T);
-      return v;
+        static std::shared_ptr<T> v(new T);
+        return v;
     }
-  };
-}
+};
+} // namespace qslary
 
 #endif

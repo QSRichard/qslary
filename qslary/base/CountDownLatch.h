@@ -6,9 +6,9 @@
 
 namespace qslary
 {
-  class CountDownLatch : noncopyable
-  {
-  public:
+class CountDownLatch : noncopyable
+{
+public:
     explicit CountDownLatch(int count);
 
     void wait();
@@ -17,11 +17,11 @@ namespace qslary
 
     int getCount() const;
 
-  private:
+private:
     mutable MutexLock m_mutex;
     Condition m_condition;
     int m_count;
-  };
-} // namespace qslary end
+};
+} // namespace qslary
 
 #endif // __QSLARY_COUNTDOWNLATCH_H_

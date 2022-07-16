@@ -1,9 +1,9 @@
 #ifndef __QSLARY_TYPES_H_
 #define __QSLARY_TYPES_H_
 
-#include <string>
 #include <stdint.h>
 #include <string.h>
+#include <string>
 
 #ifndef NDEBUG
 #include <assert.h>
@@ -12,33 +12,28 @@
 namespace qslary
 {
 
-  using std::string;
+using std::string;
 
-  inline void memZero(void *p, size_t n)
-  {
-    memset(p, 0, n);
-  }
+inline void memZero(void *p, size_t n) { memset(p, 0, n); }
 
-  template <typename To, typename From>
-  inline To implicit_cast(From const &f)
-  {
+template <typename To, typename From> inline To implicit_cast(From const &f)
+{
     return f;
-  }
+}
 
-  template <typename To, typename From>
-  inline To down_cast(From *f)
-  {
+template <typename To, typename From> inline To down_cast(From *f)
+{
 
     if (false)
     {
-      implicit_cast<From *, To>(0);
+        implicit_cast<From *, To>(0);
     }
 
 #if !defined(NDEBUG) && !defined(GOOGLE_PROTOBUF_NO_RTTI)
     assert(f == NULL || dynamic_cast<To>(f) != NULL);
 #endif
     return static_cast<To>(f);
-  }
-} // namespace qslary end
+}
+} // namespace qslary
 
 #endif // __QSLARY_TYPES_H_

@@ -136,8 +136,8 @@ void IOManager::Idle()
     int ret = 0;
     while (true && !ret)
     {
-      std::cout << "qiaoshuo" << std::endl;
-      ret = epoll_wait(epollfd_, events, 64, MAX_TIMEOUT);
+        std::cout << "IOManager::Idle" << std::endl;
+        ret = epoll_wait(epollfd_, events, 64, MAX_TIMEOUT);
     }
     for (int i = 0; i < ret; i++)
     {

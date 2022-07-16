@@ -15,13 +15,14 @@ set(LIB_SRC
     qslary/base/CurrentThread.cc 
     qslary/base/Condition.cc 
     qslary/base/Exception.cc qslary/base/CountDownLatch.cc
+    qslary/base/Hook.cc
     qslary/base/Fiber.cc qslary/net/Scheduler.cc
     qslary/net/IOManager.cc 
     qslary/net/Timer.cc
     qslary/net/Timestamp.cc
     qslary/net/Address.cc
-    # qslary/net/Socket.cc
-    qslary/net/ByteArray.cc
+    qslary/net/Socket.cc qslary/net/FdManager.cc
+    qslary/net/ByteArray.cc qslary/net/TcpServer.cc
     qslary/http/Http.cc qslary/http/HttpParser.cc
     # qslary/Timer.cc
 )
@@ -83,18 +84,20 @@ force_redefine_file_macro_for_sources(test_address)
 add_dependencies(test_address qslary)
 target_link_libraries(test_address qslary yaml-cpp pthread)
 
-
 add_executable(test_byteArray tests/test_byteArray.cc)
 force_redefine_file_macro_for_sources(test_byteArray)
 add_dependencies(test_byteArray qslary)
 target_link_libraries(test_byteArray qslary yaml-cpp pthread)
 
-
-
 add_executable(test_http_request_praser tests/test_http_request_praser.cc)
 force_redefine_file_macro_for_sources(test_http_request_praser)
 add_dependencies(test_http_request_praser qslary)
 target_link_libraries(test_http_request_praser qslary yaml-cpp pthread)
+
+add_executable(test_tcp_server tests/test_tcp_server.cc)
+force_redefine_file_macro_for_sources(test_tcp_server)
+add_dependencies(test_tcp_server qslary)
+target_link_libraries(test_tcp_server qslary yaml-cpp pthread)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

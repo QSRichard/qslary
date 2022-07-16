@@ -33,6 +33,7 @@ protected:
     virtual void startAccept(Socket::ptr sock);
 
 private:
+    // TcpServer 自身监听socket
     std::vector<Socket::ptr> sockets_;
     IOManager *accept_worker_;
     IOManager *worker_;

@@ -58,6 +58,15 @@ void ByteArray::clear()
   mData.clear();
 }
 
+size_t ByteArray::GetReadBuffer(iovec& iov, size_t len)
+{
+  size_t realSize = len > ReadableSize()?ReadableSize():len;
+  iov.iov_base = const_cast<char*>(Peek());
+  iov.iov_len = realSize;
+  mReadIndex += realSize;
+  return realSize;
+}
+
 size_t ByteArray::Read(void* buf, size_t size)
 {
   size_t realRead = size > ReadableSize()?ReadableSize():size;

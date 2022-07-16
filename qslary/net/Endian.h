@@ -22,27 +22,30 @@
 namespace qslary
 {
 template <class T>
-typename std::enable_if<sizeof(T) == sizeof(uint64_t), T>::type byteswap(T value)
+typename std::enable_if<sizeof(T) == sizeof(uint64_t), T>::type
+byteswap(T value)
 {
-  return (T)bswap_64((uint64_t)value);
+    return (T)bswap_64((uint64_t)value);
 }
 
 template <class T>
-typename std::enable_if<sizeof(T) == sizeof(uint32_t), T>::type byteswap(T value)
+typename std::enable_if<sizeof(T) == sizeof(uint32_t), T>::type
+byteswap(T value)
 {
-  return (T)bswap_32((uint32_t)value);
+    return (T)bswap_32((uint32_t)value);
 }
 
 template <class T>
-typename std::enable_if<sizeof(T) == sizeof(uint16_t), T>::type byteswap(T value)
+typename std::enable_if<sizeof(T) == sizeof(uint16_t), T>::type
+byteswap(T value)
 {
-  return (T)bswap_16((uint16_t)value);
+    return (T)bswap_16((uint16_t)value);
 }
 
 template <class T>
 typename std::enable_if<sizeof(T) == sizeof(uint8_t), T>::type byteswap(T value)
 {
-  return (T)(value);
+    return (T)(value);
 }
 
 #if BYTE_ORDER == BIG_ENDIAN
@@ -56,26 +59,17 @@ typename std::enable_if<sizeof(T) == sizeof(uint8_t), T>::type byteswap(T value)
 
 #if QSLARY_BYTE_ORDER == QSLARY_BIG_ENDIAN
 
-
 /**
  * @brief 当发送端是大端时 调用此方法
- * 
+ *
  */
-template <class T>
-T byteswapOnLittleEndian(T val)
-{
-  return val;
-}
+template <class T> T byteswapOnLittleEndian(T val) { return val; }
 
 /**
  * @brief 当发送端时小端时 调用此方法
- * 
+ *
  */
-template <class T>
-T byteswapOnBigEndian(T val)
-{
-  return byteswap(val);
-}
+template <class T> T byteswapOnBigEndian(T val) { return byteswap(val); }
 
 #else
 
@@ -83,21 +77,13 @@ T byteswapOnBigEndian(T val)
  * @brief 当发送端是大端时 调用此方法
  *
  */
-template <class T>
-T byteswapOnLittleEndian(T val)
-{
-  return byteswap(val);
-}
+template <class T> T byteswapOnLittleEndian(T val) { return byteswap(val); }
 
 /**
  * @brief 当发送端时小端时 调用此方法
  *
  */
-template <class T>
-T byteswapOnBigEndian(T val)
-{
-  return val;
-}
+template <class T> T byteswapOnBigEndian(T val) { return val; }
 #endif
 
 } // namespace qslary

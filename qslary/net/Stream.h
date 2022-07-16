@@ -11,38 +11,33 @@ namespace qslary
 class Stream
 {
 public:
-  typedef std::shared_ptr<Stream> ptr;
+    typedef std::shared_ptr<Stream> ptr;
 
-  virtual ~Stream(){};
+    virtual ~Stream(){};
 
-  //  ***********************     READ     ***********************  //
+    //  ***********************     READ     ***********************  //
 
-  virtual int read(void* buffer, size_t length) = 0;
-  
-  virtual int read(ByteArray::ptr bytearray, size_t length) = 0;
+    virtual int read(void *buffer, size_t length) = 0;
 
-  // 以下两个虚函数使用以上两个纯虚函数辅助实现
-  virtual int readFixSize(void* buffer, size_t length);
-  virtual int readFixSize(ByteArray::ptr bytearray, size_t length);
+    virtual int read(ByteArray::ptr bytearray, size_t length) = 0;
 
+    // 以下两个虚函数使用以上两个纯虚函数辅助实现
+    virtual int readFixSize(void *buffer, size_t length);
+    virtual int readFixSize(ByteArray::ptr bytearray, size_t length);
 
+    //  ***********************     WRITE     ***********************  //
 
-  //  ***********************     WRITE     ***********************  //
+    virtual int write(const void *buffer, size_t length) = 0;
+    virtual int write(ByteArray::ptr bytearray, size_t length) = 0;
 
-  virtual int write(const void* buffer, size_t length) = 0;
-  virtual int write(ByteArray::ptr bytearray, size_t length) = 0;
+    // 以下两个虚函数使用以上两个纯虚函数辅助实现
+    virtual int writeFixSize(const void *buffer, size_t length);
+    virtual int writeFixSize(ByteArray::ptr bytearray, size_t length);
 
-  // 以下两个虚函数使用以上两个纯虚函数辅助实现
-  virtual int writeFixSize(const void* buffer, size_t length);
-  virtual int writeFixSize(ByteArray::ptr bytearray, size_t length);
-
-
-
-  //  ***********************     CLOSE     ***********************  //
-  virtual void close() = 0;
+    //  ***********************     CLOSE     ***********************  //
+    virtual void close() = 0;
 };
 
-}
-
+} // namespace qslary
 
 #endif

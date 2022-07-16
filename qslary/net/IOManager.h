@@ -14,7 +14,8 @@
 #include <sys/epoll.h>
 namespace qslary
 {
-
+#define READ_EVENT 0x01
+#define WRITE_EVENT 0x04
 struct FdCallback
 {
   FdCallback(IOManager *manger) : scheduler(manger){};
@@ -46,6 +47,7 @@ class IOManager : public Scheduler, public TimerManger
 
   bool AddReadEvent(int fd, ReadCallback cb);
   bool AddWriteEvent(int fd, WriteCallback cb);
+
   bool CancelReadEvent(int fd);
   bool CancelWriteEvent(int fd);
   bool DelFileDesc(int fd);

@@ -47,6 +47,12 @@ public:
 
     void scheduler(std::function<void()> callback);
 
+    void scheduler(Fiber::ptr fiber)
+    { 
+        qslary::MutexLockGuard lock(mutex_);
+        pendingFunctors_.push_back(fiber);
+    }
+
     template <class InputInterator>
     void scheduler(InputInterator begin, InputInterator end)
     {

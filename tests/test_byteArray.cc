@@ -6,7 +6,7 @@ using namespace qslary;
 
 void test()
 {
-    ByteArray* bytes = new ByteArray();
+    ByteArray *bytes = new ByteArray();
     // std::cout<<bytes->getSize()<<std::endl;
     // bytes->WriteInt(21);
     // bytes->WriteInt(2.5);
@@ -15,11 +15,10 @@ void test()
     // std::cout<<bytes->ReadInt<int>()<<std::endl;
     // bytes->WriteInt(9999999999999999);
     // std::cout<<bytes->readFint64()<<std::endl;
-
-
 }
 
-int main(int argc,char* argv[]){
-  test();
-  return 0;
+int main(int argc, char *argv[])
+{
+    test();
+    return 0;
 }

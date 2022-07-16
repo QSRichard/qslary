@@ -44,10 +44,7 @@ void test_fiber()
   }
 }
 
-void timerFunc()
-{
-  std::cout<<"qiaoshuo"<<std::endl;
-}
+void timerFunc() { std::cout << " test iomanager timerFunc" << std::endl; }
 
 void test1()
 {

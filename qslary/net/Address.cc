@@ -18,7 +18,8 @@
 #include <utility>
 #include <vector>
 
-namespace qslary {
+namespace qslary
+{
 using std::make_shared;
 
 template <typename T> static T CreateMask(uint32_t prezeroNum = 0)
@@ -121,12 +122,10 @@ IPAddress::ptr IPAddress::Create(const sockaddr *addr, socklen_t addrlen)
     switch (addr->sa_family)
     {
     case AF_INET:
-      res.reset(
-          new IPv4Address(*(const sockaddr_in *)addr));
+        res.reset(new IPv4Address(*(const sockaddr_in *)addr));
         return res;
     case AF_INET6:
-        res.reset(
-            new IPv6Address(*(const sockaddr_in6 *)addr));
+        res.reset(new IPv6Address(*(const sockaddr_in6 *)addr));
         return res;
     default:
         return nullptr;
@@ -159,6 +158,39 @@ bool Address::operator==(const Address &rhs) const
 }
 
 bool Address::operator!=(const Address &rhs) const { return !(*this == rhs); }
+
+IPAddress::ptr IPAddress::Create(const char *addr, uint16_t port)
+{
+    addrinfo hints, *results;
+    memset(&hints, 0, sizeof(addrinfo));
+
+    hints.ai_flags = AI_NUMERICHOST;
+    hints.ai_family = AF_UNSPEC;
+
+    int error = getaddrinfo(addr, NULL, &hints, &results);
+    if (error)
+    {
+        return nullptr;
+    }
+
+    try
+    {
+        IPAddress::ptr result =
+            std::dynamic_pointer_cast<IPAddress>(IPAddress::Create(
+                results->ai_addr, (socklen_t)results->ai_addrlen));
+        if (result)
+        {
+            result->SetPort(port);
+        }
+        freeaddrinfo(results);
+        return result;
+    }
+    catch (...)
+    {
+        freeaddrinfo(results);
+        return nullptr;
+    }
+}
 
 std::vector<IPAddress::ptr>
 IPAddress::HostNameToAddress(const std::string &hostname, int family, int type,

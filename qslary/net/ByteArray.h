@@ -2,6 +2,7 @@
 #ifndef __QSYLARY_BYTEARRAY_H__
 #define __QSYLARY_BYTEARRAY_H__
 
+#include <bits/types/struct_iovec.h>
 #include <cstddef>
 #include <memory>
 #include <stdint.h>
@@ -48,13 +49,12 @@ public:
 
   void clear();
 
+  size_t GetReadBuffer(iovec& iov, size_t len);
   size_t Read(void* buf, size_t size);
   size_t Write(const void* buf, size_t size);
-
   void MakeSpace(size_t size);
 
   bool isLittleEndian() const;
-
   void SetIsLittleEndian(bool val);
 
   std::string toString();
