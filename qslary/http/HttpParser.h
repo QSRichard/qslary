@@ -1,3 +1,6 @@
+#ifndef __QSLARY_HTTP_PARSER_H_
+#define __QSLARY_HTTP_PARSER_H_
+
 #include "qslary/http/Http.h"
 #include <cstddef>
 
@@ -110,3 +113,5 @@ private:
 
 } // namespace http
 } // namespace qslary
+
+#endif

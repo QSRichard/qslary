@@ -1,5 +1,7 @@
-#include "qslary/qslary.h"
-
+#include "qslary/base/Fiber.h"
+#include "qslary/base/Logger.h"
+#include "qslary/base/Thread.h"
+#include <iostream>
 qslary::Logger::ptr g_logger = QSLARY_LOG_ROOT();
 
 void run_in_fiber()

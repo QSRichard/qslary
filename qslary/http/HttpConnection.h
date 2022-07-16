@@ -2,7 +2,7 @@
 #define __QSLARY_HTTP_CONNECTION_H_
 
 #include "qslary/base/Mutex.h"
-#include "qslary/http/http.h"
+#include "qslary/http/Http.h"
 #include "qslary/net/SockStream.h"
 #include "qslary/net/URI.h"
 #include <atomic>

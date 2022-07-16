@@ -1,7 +1,8 @@
 #include "qslary/base/Mutex.h"
 #include "qslary/base/util.h"
 #include "qslary/http/HttpConnection.h"
-#include "qslary/http/http.h"
+#include "qslary/http/Http.h"
+#include "qslary/http/HttpParser.h"
 #include "qslary/net/Address.h"
 #include "qslary/net/Socket.h"
 #include <cstddef>

@@ -50,8 +50,11 @@ public:
   void clear();
 
   size_t GetReadBuffer(iovec& iov, size_t len);
+  size_t GetWriteBuffer(iovec& iov, size_t len);
+
   size_t Read(void* buf, size_t size);
   size_t Write(const void* buf, size_t size);
+  // TODO(qiaoshuo.qs): 需要确定是否是保证有size个可写
   void MakeSpace(size_t size);
 
   bool isLittleEndian() const;
@@ -61,13 +64,13 @@ public:
   std::string toHexString();
 
   size_t ReadableSize() const {return mWriteIndex - mReadIndex; }
-  size_t WriteableSize() const {return mData.size() - mWriteIndex; }
+  size_t WriteableSize() const {return mBuffer.size() - mWriteIndex; }
   size_t PrependableSize() const {return mReadIndex;}
-  const char* Peek() const {return mData.data() + mReadIndex; }
+  const char* Peek() const {return mBuffer.data() + mReadIndex; }
 
 
 private:
-  std::vector<char> mData;
+  std::vector<char> mBuffer;
   size_t mReadIndex;
   size_t mWriteIndex;
 };

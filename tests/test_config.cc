@@ -1,5 +1,5 @@
-#include "../qslary/config.h"
-#include "../qslary/logger.h"
+#include "qslary/base/Config.h"
+#include "qslary/base/Logger.h"
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <vector>

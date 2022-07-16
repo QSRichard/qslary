@@ -1,5 +1,6 @@
 #include "qslary/http/HttpSession.h"
-#include "qslary/http/http.h"
+#include "qslary/http/Http.h"
+#include "qslary/http/HttpParser.h"
 #include <cstddef>
 #include <cstdint>
 #include <sstream>

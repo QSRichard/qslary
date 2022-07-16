@@ -2,7 +2,7 @@
 #define __QSLARY_HTTP_SERVLET_H_
 
 #include "qslary/http/HttpSession.h"
-#include "qslary/http/http.h"
+#include "qslary/http/Http.h"
 #include <functional>
 #include <memory>
 #include <string>
