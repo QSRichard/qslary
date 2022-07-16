@@ -3,8 +3,6 @@
 
 #include "qslary/base/types.h"
 #include "qslary/base/noncopyable.h"
-#include "qslary/http/http11_parser.h"
-#include "qslary/http/httpclient_parser.h"
 
 #include <boost/lexical_cast.hpp>
 #include <cstddef>
@@ -14,6 +12,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <sys/types.h>
+#include <unordered_map>
 namespace qslary
 {
 namespace http
@@ -148,25 +148,19 @@ HttpMethod CharsToHttpMethod(const char* method);
 HttpStatus StringToHttpStatus(const std::string& status);
 HttpStatus CharsToHttpStatus(const char* status);
 
-
 const char* HttpMethodToString(const HttpMethod& method);
 const char* HttpStatusToString(const HttpStatus& status);
-
-struct CaseInsenitiveless
-{
-  bool operator()(const std::string& lhs, const std::string& rhs) const;
-};
 
 class HttpRequest:public noncopyable
 {
 public:
   typedef std::shared_ptr<HttpRequest> ptr;
-  typedef std::map<std::string, std::string, CaseInsenitiveless> HttpRequestMap;
+  typedef std::map<std::string, std::string> HttpRequestMap;
   std::ostream& dump(std::ostream& ios) const;
   std::string toString() const;
 
   HttpRequest();
-  HttpRequest(const HttpMethod& method, const HttpStatus& status, uint8_t version=0x11, bool close=true);
+  HttpRequest(const HttpMethod& method, const HttpStatus& status, const std::string& version="1.1", bool close=true);
   ~HttpRequest()
   {
   };
@@ -176,7 +170,7 @@ public:
 
   HttpMethod getMethod() const { return method_; }
   HttpStatus getStatus() const { return status_; }
-  uint8_t getVersion() const { return version_; }
+  std::string getVersion() const { return mVersion; }
   bool isClose() const { return close_; }
   std::string getPath() const { return path_; }
   std::string getQuery() const { return query_; }
@@ -186,22 +180,30 @@ public:
 
   void setMethod(const HttpMethod& method) { method_ = method; }
   void setStatus(const HttpStatus& status) { status_ = status; }
-  void setVersion(uint8_t version) { version_ = version; }
+  void SetProtocl(const std::string& protocl) {mProtocol = protocl;}
+  void setVersion(const std::string& version) { mVersion = version; }
+  void SetURL(const std::string url) {mURL = url;}
   void setClose(bool close) { close_ = close; }
   void setPath(const std::string& path) { path_ = path; };
   void setQuery(const std::string& query) { query_ = query; }
   void setFragment(const std::string& framgent) { fragment_ = framgent; }
   void setBody(const std::string& body) { body_ = body; }
-
+  // 请求头
   const HttpRequestMap& getHeaders() const { return headres_; }
   const HttpRequestMap& getParmas() const { return parmas_; }
   const HttpRequestMap& getCookis() const { return cookies_; }
-
+  // 请求头
   std::string getHeaderEntry(const std::string& key);
   std::string getParmaEntry(const std::string& key);
   std::string getCookisEntry(const std::string& key);
 
+  bool HasHeaderEntry(const std::string& key)
+  {
+    return headres_.count(key) > 0;
+  }
+
   void setHeaderEntry(const std::string& key, const std::string& value);
+  // parma 可能在URL中也可能在post中的body部分
   void setParmaEntry(const std::string& key, const std::string& value);
   void setCookiesEntry(const std::string& key, const std::string& value);
 
@@ -233,7 +235,9 @@ private:
   {
     auto it = map.find(key);
     if (it == map.end())
+    {
       return false;
+    }
     try
     {
       value = boost::lexical_cast<T>(it->second);
@@ -247,9 +251,12 @@ private:
 
 private :
   HttpMethod method_;
+  std::string mProtocol;
+  std::string mVersion;
   HttpStatus status_;
-  uint8_t version_;
   bool close_;
+  std::string mURL;
+  std::string host;
   std::string path_;
   std::string query_;
   std::string fragment_;
@@ -261,51 +268,44 @@ private :
   
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class HttpResponse:public noncopyable
 {
 public:
   typedef std::shared_ptr<HttpResponse> ptr;
-  typedef std::map<std::string, std::string, CaseInsenitiveless> HttpResponseMap;
+  typedef std::map<std::string, std::string> HttpResponseMap;
   std::ostream& dump(std::ostream& ios) const;
   std::string toString() const;
   
   HttpResponse();
-  HttpResponse(const HttpStatus& status, uint8_t version = 0x11, bool close = true);
+  HttpResponse(const HttpStatus& status, const std::string& version = "1.1", bool close = true);
   ~HttpResponse() = default;
   
   HttpStatus getStatus() const { return status_; }
-  uint8_t getVersion() const { return version_; }
+  std::string getVersion() const { return mVersion; }
   bool getClose() const { return close_; }
   std::string getBody() const { return body_; }
   std::string getReason() const { return reason_; }
   const HttpResponseMap& getHeaders() const { return headers_; }
 
+
+  void SetStatusCode(const std::string& statusCode){mStatusCode = statusCode;}
+  void SetStatusDesc(const std::string& statusDesc){mStatusDesc = statusDesc;}
+  std::string GetStatusCode() const {return mStatusCode;}
+  std::string GetStatusDesc() const {return mStatusDesc;}
+  std::string GetVersion() const {return mVersion;}
+  std::string GetBody() const {return body_;}
+
   void setStatus(const HttpStatus& status) { status_ = status; }
-  void setVersion(uint8_t version) { version_ = version; }
+  void setVersion(const std::string version) { mVersion = version; }
   void setClose(bool close) { close_ = close; }
   void setBody(const std::string& body) { body_ = body; }
   void setReason(const std::string& reason) { reason_ = reason; }
   void setHeaders(const HttpResponseMap& headers) { headers_ = headers; }
 
+  bool HasHeaderEntry(const std::string& key)
+  {
+    return headers_.find(key) != headers_.end();
+  }
   std::string getHeaderEntry(const std::string& key);
   void setHeaderEntry(const std::string& key, const std::string& value);
   void delHeaderEntry(const std::string& key);
@@ -336,7 +336,9 @@ private:
 
 private:
   HttpStatus status_;
-  uint8_t version_;
+  std::string mStatusCode;
+  std::string mStatusDesc;
+  std::string mVersion;
   bool close_;
   std::string body_;
   std::string reason_;
@@ -344,62 +346,9 @@ private:
 };
 
 
-class HttpRequestParser
-{
-public:
-  typedef std::shared_ptr<HttpRequestParser> ptr;
-  HttpRequestParser();
-
-  size_t execute(char* data, size_t len);
-  int isFinished();
-  int hasError();
-
-  HttpRequest::ptr getData() const { return requestData_; }
-  void setError(int error) { error_ = error; }
-
-  const http_parser& getParser() const
-  {
-    return parser_;
-  }
-
-  uint64_t getContentLength();
-
-private:
-  struct http_parser parser_;
-  int error_;
-  HttpRequest::ptr requestData_;
-};
-
-class HttpResponseParser
-{
-public:
-  typedef std::shared_ptr<HttpResponseParser> ptr;
-  HttpResponseParser();
-
-  size_t execute(char* data, size_t len,bool chunck=false);
-  int isFinished();
-  int hasError();
-
-  int getError() const { return error_; }
-  uint64_t getContentLength();
-
-  void setError(int error) { error_ = error; }
-  HttpResponse::ptr getData() const { return responseData_; }
-
-  const httpclient_parser& getParser() const { return parser_; }
-  
-  
-private:
-  
-  struct httpclient_parser parser_;
-  int error_;
-  HttpResponse::ptr responseData_;
-};
-
 std::ostream& operator<<(std::ostream& os, const HttpRequest& req);
 
 std::ostream& operator<<(std::ostream& os, const HttpResponse& rsp);
-
 
 } // namespace http
 

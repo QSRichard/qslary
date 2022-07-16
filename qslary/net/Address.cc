@@ -18,8 +18,8 @@
 #include <utility>
 #include <vector>
 
-namespace qslary
-{
+namespace qslary {
+using std::make_shared;
 
 template <typename T> static T CreateMask(uint32_t prezeroNum = 0)
 {
@@ -115,16 +115,19 @@ bool Address::GetInterfaceAddresses(
     return !result.empty();
 }
 
-Address::ptr Address::Create(const sockaddr *addr, socklen_t addrlen)
+IPAddress::ptr IPAddress::Create(const sockaddr *addr, socklen_t addrlen)
 {
+    IPAddress::ptr res;
     switch (addr->sa_family)
     {
     case AF_INET:
-        return std::make_shared<Address>(
-            new IPv4Address(*(const sockaddr_in *)addr));
+      res.reset(
+          new IPv4Address(*(const sockaddr_in *)addr));
+        return res;
     case AF_INET6:
-        return std::make_shared<Address>(
+        res.reset(
             new IPv6Address(*(const sockaddr_in6 *)addr));
+        return res;
     default:
         return nullptr;
     }

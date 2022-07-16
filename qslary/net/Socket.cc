@@ -35,6 +35,7 @@ Socket::ptr Socket::CreateTCPSocket()
   Socket::ptr sock(new Socket(AF_INET, SOCK_STREAM, 0));
   return sock;
 }
+
 Socket::ptr Socket::CreateUDPSocket()
 {
   Socket::ptr sock(new Socket(AF_INET, SOCK_DGRAM, 0));
@@ -46,6 +47,7 @@ Socket::ptr Socket::CreateTCPSocket6()
   Socket::ptr sock(new Socket(AF_INET6, SOCK_STREAM, 0));
   return sock;
 }
+
 Socket::ptr Socket::CreateUDPSocket6()
 {
   Socket::ptr sock(new Socket(AF_INET6, SOCK_DGRAM, 0));
@@ -57,6 +59,7 @@ Socket::ptr Socket::CreateTCPUnixSocket(qslary::Address::ptr addr)
   Socket::ptr sock(new Socket(AF_UNIX, SOCK_STREAM, 0));
   return sock;
 }
+
 Socket::ptr Socket::CreateUDPUnixSocket(qslary::Address::ptr addr)
 {
   Socket::ptr sock(new Socket(AF_UNIX, SOCK_DGRAM, 0));
@@ -67,6 +70,7 @@ Socket::Socket(int family, int type, int protocol)
     : socketfd_(-1), family_(family), type_(type), protocol_(protocol), isConnected_(false)
 {
 }
+
 Socket::~Socket()
 {
   close();
@@ -108,20 +112,20 @@ void Socket::initSock()
 }
 
 // 传入fd并对sock做初始化
-bool Socket::init(int fd)
-{
-  FdContext::ptr fd_ctx = FdMgr::getInstance()->getFdContext(fd);
-  if (fd_ctx && fd_ctx->isSocket() && !fd_ctx->isClosed())
-  {
-    socketfd_ = fd;
-    isConnected_ = true;
-    initSock();
-    getLocalAddress();
-    getRemoteAddress();
-    return true;
-  }
-  return false;
-}
+// bool Socket::init(int fd)
+// {
+//   FdContext::ptr fd_ctx = FdMgr::getInstance()->getFdContext(fd);
+//   if (fd_ctx && fd_ctx->isSocket() && !fd_ctx->isClosed())
+//   {
+//     socketfd_ = fd;
+//     isConnected_ = true;
+//     initSock();
+//     getLocalAddress();
+//     getRemoteAddress();
+//     return true;
+//   }
+//   return false;
+// }
 
 Socket::ptr Socket::accept()
 {
@@ -401,19 +405,19 @@ bool Socket::setRecvTimeout(uint64_t val)
   return setOption(SOL_SOCKET,SO_RCVTIMEO,tv);
 }
 
-uint64_t Socket::getSendTimeout() const
-{
-  qslary::FdContext::ptr fd_ctx = qslary::FdMgr::getInstance()->getFdContext(socketfd_);
-  assert(fd_ctx);
-  return fd_ctx->getTimeout(SO_SNDTIMEO);
+// uint64_t Socket::getSendTimeout() const
+// {
+//   qslary::FdContext::ptr fd_ctx = qslary::FdMgr::getInstance()->getFdContext(socketfd_);
+//   assert(fd_ctx);
+//   return fd_ctx->getTimeout(SO_SNDTIMEO);
   
-}
-uint64_t Socket::getRecvTimeout() const
-{
-  qslary::FdContext::ptr fd_ctx = qslary::FdMgr::getInstance()->getFdContext(socketfd_);
-  assert(fd_ctx);
-  return fd_ctx->getTimeout(SO_RCVTIMEO);
-}
+// }
+// uint64_t Socket::getRecvTimeout() const
+// {
+//   qslary::FdContext::ptr fd_ctx = qslary::FdMgr::getInstance()->getFdContext(socketfd_);
+//   assert(fd_ctx);
+//   return fd_ctx->getTimeout(SO_RCVTIMEO);
+// }
 
 bool Socket::isVaild() const
 {
@@ -433,26 +437,26 @@ std::ostream& Socket::dump(std::ostream& os) const
   os << " Socket sock= " << socketfd_ << " is connect= " << isConnected_ << " family = " << family_ << " type " << type_
      << " protocol " << protocol_;
   if (localAddress_)
-    os << " localAddress = " << localAddress_->toString();
+    os << " localAddress = " << localAddress_->ToString();
   if (remoteAddress_)
-    os << " remoteAddress = " << remoteAddress_->toString();
+    os << " remoteAddress = " << remoteAddress_->ToString();
   os << std::endl;
   return os;
 }
 
 bool Socket::cancelRead()
 {
-  return IOManager::GetIOManager()->cancelEvent(socketfd_, qslary::IOManager::READ);
+  return IOManager::GetIOManager()->CancelReadEvent(socketfd_);
 }
 bool Socket::cancelWrite()
 {
-  return IOManager::GetIOManager()->cancelEvent(socketfd_, qslary::IOManager::WRITE);
+  return IOManager::GetIOManager()->CancelWriteEvent(socketfd_);
 }
 bool Socket::cancelAccept()
 {
-  return IOManager::GetIOManager()->cancelEvent(socketfd_, qslary::IOManager::READ);
+  return IOManager::GetIOManager()->CancelReadEvent(socketfd_);
 }
-bool Socket::cancelAll() { return IOManager::GetIOManager()->cancelAll(socketfd_); }
+bool Socket::cancelAll() { return IOManager::GetIOManager()->CancelAll(socketfd_); }
 
 std::ostream& operator<<(std::ostream& os, const Socket& addr)
 {

@@ -34,13 +34,12 @@ public:
 
     virtual ~Address() {}
 
-    static Address::ptr Create(const sockaddr *addr, socklen_t addrlen);
     int GetFamily() const;
     virtual const sockaddr *GetAddr() const = 0;
     virtual sockaddr *GetAddr() = 0;
     virtual const socklen_t GetAddrLen() const = 0;
 
-    virtual std::ostream &Insert(std::ostream &os) const = 0;
+    virtual std::ostream &Insert(std::ostream &os) const {return os;}
     std::string ToString();
 
     bool operator<(const Address &rhs) const;
@@ -60,6 +59,9 @@ public:
     static IPAddress::ptr LookupAnyAddr(const std::string &hostname,
                                         int family = AF_UNSPEC, int type = 0,
                                         int protocol = 0);
+
+    static IPAddress::ptr Create(const sockaddr *addr, socklen_t addrlen);
+    static IPAddress::ptr Create(const char* addr, uint16_t port = 0);
 
     virtual IPAddress::ptr BroadcastAddress(uint32_t prefix_len) = 0;
     virtual IPAddress::ptr NetworkAddress(uint32_t prefix_len) = 0;

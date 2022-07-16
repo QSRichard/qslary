@@ -19,6 +19,10 @@ set(LIB_SRC
     qslary/net/IOManager.cc 
     qslary/net/Timer.cc
     qslary/net/Timestamp.cc
+    qslary/net/Address.cc
+    # qslary/net/Socket.cc
+    qslary/net/ByteArray.cc
+    qslary/http/Http.cc qslary/http/HttpParser.cc
     # qslary/Timer.cc
 )
 
@@ -72,6 +76,25 @@ add_executable(test_iomanager tests/test_iomanager.cc)
 force_redefine_file_macro_for_sources(test_iomanager)
 add_dependencies(test_iomanager qslary)
 target_link_libraries(test_iomanager qslary yaml-cpp pthread)
+
+
+add_executable(test_address tests/test_address.cc)
+force_redefine_file_macro_for_sources(test_address)
+add_dependencies(test_address qslary)
+target_link_libraries(test_address qslary yaml-cpp pthread)
+
+
+add_executable(test_byteArray tests/test_byteArray.cc)
+force_redefine_file_macro_for_sources(test_byteArray)
+add_dependencies(test_byteArray qslary)
+target_link_libraries(test_byteArray qslary yaml-cpp pthread)
+
+
+
+add_executable(test_http_request_praser tests/test_http_request_praser.cc)
+force_redefine_file_macro_for_sources(test_http_request_praser)
+add_dependencies(test_http_request_praser qslary)
+target_link_libraries(test_http_request_praser qslary yaml-cpp pthread)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

@@ -50,6 +50,11 @@ class IOManager : public Scheduler, public TimerManger
   bool CancelWriteEvent(int fd);
   bool DelFileDesc(int fd);
 
+  bool CancelAll(int fd)
+  {
+    return CancelReadEvent(fd) && CancelWriteEvent(fd);
+  }
+
   bool IsClean(uint64_t &timeout);
   static IOManager *GetIOManager();
 
