@@ -1,569 +1,211 @@
 #include "qslary/http/HttpParser.h"
 #include <cctype>
 #include <cstddef>
+#include <cstdint>
 #include <sstream>
 #include <string>
 
 using namespace qslary::http;
 
-bool HttpRequestParser::IsVaild(size_t mSize) const
+void on_request_method(void *data, const char *at, size_t length)
 {
-    return mDecodeState != HttpRequestDecodeState::INVALID &&
-           mDecodeState != HttpRequestDecodeState::INVALID_METHOD &&
-           mDecodeState != HttpRequestDecodeState::INVALID_URI &&
-           mDecodeState != HttpRequestDecodeState::INVALID_VERSION &&
-           mDecodeState != HttpRequestDecodeState::INVALID_HEADER &&
-           mDecodeState != HttpRequestDecodeState::COMPLEIE &&
-           mNextPosition < mSize;
-}
-HttpRequest::ptr HttpRequestParser::TryDecode(const char *mData, size_t mSize)
-{
-    HttpRequest::ptr request(new HttpRequest());
-    mDecodeState = HttpRequestDecodeState::START;
-    int bodyLength = 0;
-    std::string paramKey, paramVal;
-    std::string headerKey, headerVal;
-    char *ptr = const_cast<char *>(mData);
-    char *strbegin = ptr;
-    while (IsVaild(mSize))
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    HttpMethod m = CharsToHttpMethod(at);
+
+    if (m == HttpMethod::UNKNOW)
     {
-        char ch = *ptr;
-        mNextPosition++;
-        switch (mDecodeState)
-        {
-        case HttpRequestDecodeState::START:
-            if (ch == CR || ch == LF || std::isblank(ch))
-            {
-                break;
-            }
-            if (std::isupper(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::METHOD;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID;
-            }
-            break;
-        case HttpRequestDecodeState::METHOD:
-            if (std::isupper(ch))
-            {
-                break;
-            }
-            // method 解析结束
-            if (std::isblank(ch))
-            {
-                std::string method(strbegin, ptr - strbegin);
-                request->setMethod(StringToHttpMethod(method));
-                mDecodeState = HttpRequestDecodeState::BEFORE_URI;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_METHOD;
-            }
-            break;
-        case HttpRequestDecodeState::BEFORE_URI:
-            if (isblank(ch))
-            {
-                break;
-            }
-            if (ch == '/')
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::IN_URI;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_URI;
-            }
-            break;
-        case HttpRequestDecodeState::IN_URI:
-            if (std::isblank(ch))
-            {
-                string URL(strbegin, ptr - strbegin);
-                request->SetURL(URL);
-                mDecodeState = HttpRequestDecodeState::BEFORE_PROTOCAL;
-                break;
-            }
-            if (ch == '?')
-            {
-                string URL(strbegin, ptr - strbegin);
-                request->SetURL(URL);
-                mDecodeState = HttpRequestDecodeState::BEFORE_URI_PARAM_KEY;
-            }
-            break;
-        case HttpRequestDecodeState::BEFORE_URI_PARAM_KEY:
-            if (std::isblank(ch) || ch == CR || ch == LF)
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_URI;
-                break;
-            }
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::URI_PARAM_KEY;
-            }
-            break;
-        case HttpRequestDecodeState::URI_PARAM_KEY:
-            if (std::isblank(ch))
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_URI;
-                break;
-            }
-            if (ch == '=')
-            {
-                paramKey = string(strbegin, ptr - strbegin);
-                mDecodeState = HttpRequestDecodeState::BEFORE_URI_PARAM_VALUE;
-                break;
-            }
-            break;
-        case HttpRequestDecodeState::BEFORE_URI_PARAM_VALUE:
-            if (isblank(ch) || ch == LF || ch == CR)
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_URI;
-            }
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::URI_PARAM_VALUE;
-            }
-            break;
-        case HttpRequestDecodeState::URI_PARAM_VALUE:
-            if (ch == '&')
-            {
-
-                paramVal = string(strbegin, ptr - strbegin);
-                request->setParmaEntry(paramKey, paramVal);
-                mDecodeState = HttpRequestDecodeState::BEFORE_URI_PARAM_KEY;
-            }
-            else if (isblank(ch))
-            {
-                paramVal = string(strbegin, ptr - strbegin);
-                request->setParmaEntry(paramKey, paramVal);
-                mDecodeState = HttpRequestDecodeState::BEFORE_PROTOCAL;
-            }
-            else
-            {}
-            break;
-        case HttpRequestDecodeState::BEFORE_PROTOCAL:
-            if (isblank(ch))
-            {}
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::PROTOCAL;
-            }
-            break;
-        case HttpRequestDecodeState::PROTOCAL:
-            if (ch == '/')
-            {
-                request->SetProtocl(string(strbegin, ptr - strbegin));
-                mDecodeState = HttpRequestDecodeState::BEFORE_VERSION;
-            }
-            break;
-        case HttpRequestDecodeState::BEFORE_VERSION:
-            if (std::isdigit(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::VERSION;
-                break;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_VERSION;
-                break;
-            }
-
-        case HttpRequestDecodeState::VERSION:
-            if (ch == '.')
-            {
-                mDecodeState = HttpRequestDecodeState::VERSION_SPLIT;
-                break;
-            }
-            if (ch == CR)
-            {
-                std::string version(strbegin, ptr - strbegin);
-                mDecodeState = HttpRequestDecodeState::WHEN_CR;
-            }
-            else if (isdigit(ch))
-            {
-                break;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID;
-            }
-            break;
-        case HttpRequestDecodeState::VERSION_SPLIT:
-            if (isdigit(ch))
-            {
-                mDecodeState = HttpRequestDecodeState::VERSION;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_VERSION;
-            }
-            break;
-        case HttpRequestDecodeState::HEADER_KEY:
-            if (isblank(ch))
-            {
-                headerKey = string(strbegin, ptr - strbegin);
-                mDecodeState = HttpRequestDecodeState::HEADER_BEFORE_COLON;
-            }
-            else if (ch == ':')
-            {
-                headerKey = string(strbegin, ptr - strbegin);
-                mDecodeState = HttpRequestDecodeState::HEADER_AFTER_COLON;
-            }
-            break;
-        case HttpRequestDecodeState::HEADER_BEFORE_COLON:
-            if (isblank(ch))
-            {
-                break;
-            }
-            if (ch == ':')
-            {
-                mDecodeState = HttpRequestDecodeState::HEADER_AFTER_COLON;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_HEADER;
-            }
-            break;
-        case HttpRequestDecodeState::HEADER_AFTER_COLON:
-            if (isblank(ch))
-            {
-                break;
-            }
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::HEADER_VALUE;
-            }
-            break;
-        case HttpRequestDecodeState::HEADER_VALUE:
-            if (ch == CR)
-            {
-                headerVal = string(strbegin, ptr - strbegin);
-                request->setHeaderEntry(headerKey, headerVal);
-                mDecodeState = HttpRequestDecodeState::WHEN_CR;
-            }
-            break;
-        case HttpRequestDecodeState::WHEN_CR:
-            if (ch == LF)
-            {
-                mDecodeState = HttpRequestDecodeState::CR_LF;
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID;
-            }
-            break;
-        case HttpRequestDecodeState::CR_LF:
-            if (ch == CR)
-            {
-                mDecodeState = HttpRequestDecodeState::CR_LF_CR;
-            }
-            else if (isblank(ch))
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID;
-            }
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpRequestDecodeState::HEADER_KEY;
-            }
-            break;
-        case HttpRequestDecodeState::CR_LF_CR:
-            if (ch == LF)
-            { // conent length
-                if (request->HasHeaderEntry("Content-Length"))
-                {
-                    request->getHeaderEntryAs("Content-Length", bodyLength);
-                    if (bodyLength > 0)
-                    {
-                        strbegin = ptr + 1;
-                        mDecodeState = HttpRequestDecodeState::BODY;
-                    }
-                    else
-                    {
-                        mDecodeState = HttpRequestDecodeState::COMPLEIE;
-                    }
-                }
-                else
-                {
-                    mDecodeState = HttpRequestDecodeState::COMPLEIE;
-                }
-            }
-            else
-            {
-                mDecodeState = HttpRequestDecodeState::INVALID_HEADER;
-            }
-            break;
-        case HttpRequestDecodeState::BODY:
-        {
-            request->setBody(string(strbegin, bodyLength));
-            mDecodeState = HttpRequestDecodeState::COMPLEIE;
-        }
-        default:
-            break;
-        }
-        ptr++;
+        parser->setError(1000);
+        return;
     }
-    return mDecodeState == HttpRequestDecodeState::COMPLEIE ? request : nullptr;
+    parser->getData()->setMethod(m);
 }
 
-bool HttpResponseParser::IsVaild(size_t size)
-{
-    return mDecodeState != HttpResponseDecodeState::INVALID &&
-           mDecodeState != HttpResponseDecodeState::INVALID_HEADER &&
-           mDecodeState != HttpResponseDecodeState::INVALID_VERSION &&
-           mNextPosition < size;
-}
-HttpResponse::ptr HttpResponseParser::TyeCode(const char *data, size_t len)
-{
+void on_request_uri(void *data, const char *at, size_t length) {}
 
-    HttpResponse::ptr response(new HttpResponse);
-    char *ptr = const_cast<char *>(data);
-    char *strbegin;
-    size_t bodyLength;
-    std::string headerKey, headerVal;
-    mDecodeState = HttpResponseDecodeState::START;
-    while (IsVaild(len))
+void on_request_fragment(void *data, const char *at, size_t length)
+{
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    parser->getData()->setFragment(std::string(at, length));
+}
+
+void on_request_path(void *data, const char *at, size_t length)
+{
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    parser->getData()->setPath(std::string(at, length));
+}
+
+void on_request_query(void *data, const char *at, size_t length)
+{
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    parser->getData()->setQuery(std::string(at, length));
+}
+
+void on_request_version(void *data, const char *at, size_t length)
+{
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    uint8_t v = 0;
+    if (strncmp(at, "HTTP/1.1", length) == 0)
     {
-        mNextPosition++;
-        char ch = *ptr;
-        switch (mDecodeState)
-        {
-        case HttpResponseDecodeState::START:
-            if (isupper(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::PROTOCOL;
-            }
-            else if (ch == CR || ch == LF || isblank(ch))
-            {}
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::PROTOCOL:
-            if (isupper(ch))
-            {
-                break;
-            }
-            else if (ch == '/')
-            {
-                mDecodeState = HttpResponseDecodeState::BEFORE_VERSION;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::BEFORE_VERSION:
-            if (isdigit(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::VERSION;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::VERSION:
-            if (isdigit(ch))
-            {
-                break;
-            }
-            else if (ch == '.')
-            {
-                mDecodeState = HttpResponseDecodeState::VERSION_SPLIT;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::VERSION_SPLIT:
-            if (isdigit(ch))
-            {
-                break;
-            }
-            else if (isblank(ch))
-            {
-                std::string version(strbegin, ptr - strbegin);
-                response->setVersion(version);
-                mDecodeState = HttpResponseDecodeState::BEFORE_STATUS_CODE;
-                break;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::BEFORE_STATUS_CODE:
-            if (std::isdigit(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::IN_STATUS_CODE;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::IN_STATUS_CODE:
-            if (isdigit(ch))
-            {
-                break;
-            }
-            else if (isblank(ch))
-            {
-                std::string statusCode(strbegin, ptr - strbegin);
-                response->SetStatusCode(statusCode);
-                mDecodeState = HttpResponseDecodeState::BEFORE_STATUS;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-
-        case HttpResponseDecodeState::BEFORE_STATUS:
-            if (isupper(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::IN_STATUS;
-                break;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-        case HttpResponseDecodeState::IN_STATUS:
-            if (ch == CR)
-            {
-                std::string statusDesc(strbegin, ptr - strbegin);
-                response->SetStatusDesc(statusDesc);
-                mDecodeState = HttpResponseDecodeState::WHEN_CR;
-            }
-            else
-            {}
-            break;
-        case HttpResponseDecodeState::WHEN_CR:
-            if (ch == LF)
-            {
-                mDecodeState = HttpResponseDecodeState::CR_LF;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::CR_LF:
-            if (ch == CR)
-            {
-                mDecodeState = HttpResponseDecodeState::CR_LF_CR;
-            }
-            else if (isalpha(ch))
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::HEADER_KEY;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        case HttpResponseDecodeState::HEADER_KEY:
-            if (isblank(ch))
-            {
-                headerKey = string(strbegin, ptr - strbegin);
-                mDecodeState = HttpResponseDecodeState::HEADER_BEFORE_COLON;
-            }
-            else if (ch == ':')
-            {
-                headerKey = string(strbegin, ptr - strbegin);
-                mDecodeState = HttpResponseDecodeState::HEADER_AFTER_COLON;
-            }
-            break;
-        case HttpResponseDecodeState::HEADER_BEFORE_COLON:
-            if (isblank(ch))
-            {
-                break;
-            }
-            if (ch == ':')
-            {
-                mDecodeState = HttpResponseDecodeState::HEADER_AFTER_COLON;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID_HEADER;
-            }
-            break;
-        case HttpResponseDecodeState::HEADER_AFTER_COLON:
-            if (isblank(ch))
-            {
-                break;
-            }
-            else
-            {
-                strbegin = ptr;
-                mDecodeState = HttpResponseDecodeState::HEADER_VALUE;
-            }
-            break;
-        case HttpResponseDecodeState::HEADER_VALUE:
-            if (ch == CR)
-            {
-                headerVal = string(strbegin, ptr - strbegin);
-                response->setHeaderEntry(headerKey, headerVal);
-                mDecodeState = HttpResponseDecodeState::WHEN_CR;
-            }
-            break;
-        case HttpResponseDecodeState::CR_LF_CR:
-            if (ch == LF)
-            {
-                if (response->HasHeaderEntry("Content-Length"))
-                {
-                    response->getHeaderEntryAs("Content-Length", bodyLength);
-                    if (bodyLength)
-                    {
-                        strbegin = ptr + 1;
-                        mDecodeState = HttpResponseDecodeState::BODY;
-                    }
-                    else
-                    {
-                        mDecodeState = HttpResponseDecodeState::COMPLEIE;
-                    }
-                }
-                else
-                {
-                    mDecodeState = HttpResponseDecodeState::INVALID;
-                }
-                break;
-            }
-            break;
-        case HttpResponseDecodeState::BODY:
-            if (bodyLength < len - mNextPosition)
-            {
-                std::string body(strbegin, bodyLength);
-                response->setBody(body);
-                mDecodeState = HttpResponseDecodeState::COMPLEIE;
-            }
-            else
-            {
-                mDecodeState = HttpResponseDecodeState::INVALID;
-            }
-            break;
-        default:
-            break;
-        }
-        ptr++;
+        v = 0x11;
     }
-    return mDecodeState == HttpResponseDecodeState::COMPLEIE ? response
-                                                             : nullptr;
+    else if (strncmp(at, "HTTP/1.0", length) == 0)
+    {
+        v = 0x10;
+    }
+    else
+    {
+        parser->setError(1001);
+        return;
+    }
+    parser->getData()->setVersion(v);
+}
+
+void on_request_header_done(void *data, const char *at, size_t length)
+{
+}
+
+void on_request_http_field(void *data, const char *field, size_t flen,
+                           const char *value, size_t vlen)
+{
+    HttpRequestParser *parser = static_cast<HttpRequestParser *>(data);
+    if (flen == 0)
+    {
+        return;
+    }
+    parser->getData()->setHeaderEntry(std::string(field, flen),
+                                 std::string(value, vlen));
+}
+
+HttpRequestParser::HttpRequestParser() : m_error(0)
+{
+    m_data.reset(new http::HttpRequest);
+    http_parser_init(&m_parser);
+    m_parser.request_method = on_request_method;
+    m_parser.request_uri = on_request_uri;
+    m_parser.fragment = on_request_fragment;
+    m_parser.request_path = on_request_path;
+    m_parser.query_string = on_request_query;
+    m_parser.http_version = on_request_version;
+    m_parser.header_done = on_request_header_done;
+    m_parser.http_field = on_request_http_field;
+    m_parser.data = this;
+}
+
+uint64_t HttpRequestParser::getContentLength()
+{
+    uint64_t length = 0;
+    m_data->getHeaderEntryAs("content-length", length);
+    return length;
+}
+
+size_t HttpRequestParser::execute(char *data, size_t len)
+{
+    size_t offset = http_parser_execute(&m_parser, data, len, 0);
+    memmove(data, data + offset, (len - offset));
+    return offset;
+}
+
+int HttpRequestParser::isFinished() { return http_parser_finish(&m_parser); }
+
+int HttpRequestParser::hasError()
+{
+    return m_error || http_parser_has_error(&m_parser);
+}
+
+
+/************************ Response Parser ************************/
+
+void on_response_reason(void *data, const char *at, size_t length)
+{
+    HttpResponseParser *parser = static_cast<HttpResponseParser *>(data);
+    parser->getData()->setReason(std::string(at, length));
+}
+
+void on_response_status(void *data, const char *at, size_t length)
+{
+    HttpResponseParser *parser = static_cast<HttpResponseParser *>(data);
+    HttpStatus status = (HttpStatus)(atoi(at));
+    parser->getData()->setStatus(status);
+}
+
+void on_response_chunk(void *data, const char *at, size_t length) {}
+
+void on_response_version(void *data, const char *at, size_t length)
+{
+    HttpResponseParser *parser = static_cast<HttpResponseParser *>(data);
+    uint8_t v = 0;
+    if (strncmp(at, "HTTP/1.1", length) == 0)
+    {
+        v = 0x11;
+    }
+    else if (strncmp(at, "HTTP/1.0", length) == 0)
+    {
+        v = 0x10;
+    }
+    else
+    {
+        parser->setError(1001);
+        return;
+    }
+
+    parser->getData()->setVersion(v);
+}
+
+void on_response_header_done(void *data, const char *at, size_t length) {}
+
+void on_response_last_chunk(void *data, const char *at, size_t length) {}
+
+void on_response_http_field(void *data, const char *field, size_t flen,
+                            const char *value, size_t vlen)
+{
+    HttpResponseParser *parser = static_cast<HttpResponseParser *>(data);
+    if (flen == 0)
+    {
+        return;
+    }
+    parser->getData()->setHeaderEntry(std::string(field, flen),
+                                      std::string(value, vlen));
+}
+
+HttpResponseParser::HttpResponseParser() : m_error(0)
+{
+    m_data.reset(new http::HttpResponse);
+    httpclient_parser_init(&m_parser);
+    m_parser.reason_phrase = on_response_reason;
+    m_parser.status_code = on_response_status;
+    m_parser.chunk_size = on_response_chunk;
+    m_parser.http_version = on_response_version;
+    m_parser.header_done = on_response_header_done;
+    m_parser.last_chunk = on_response_last_chunk;
+    m_parser.http_field = on_response_http_field;
+    m_parser.data = this;
+}
+
+size_t HttpResponseParser::execute(char *data, size_t len, bool chunck)
+{
+    if (chunck)
+    {
+        httpclient_parser_init(&m_parser);
+    }
+    size_t offset = httpclient_parser_execute(&m_parser, data, len, 0);
+
+    memmove(data, data + offset, (len - offset));
+    return offset;
+}
+
+int HttpResponseParser::isFinished()
+{
+    return httpclient_parser_finish(&m_parser);
+}
+
+int HttpResponseParser::hasError()
+{
+    return m_error || httpclient_parser_has_error(&m_parser);
+}
+
+uint64_t HttpResponseParser::getContentLength()
+{
+    uint64_t length = 0;
+    m_data->getHeaderEntryAs("content-length", length);
+    return length;
 }

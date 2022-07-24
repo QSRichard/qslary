@@ -81,13 +81,19 @@ const char *HttpStatusToString(const HttpStatus &status)
     }
 }
 
+bool CaseInsensitiveLess::operator()(const std::string &lhs,
+                                     const std::string &rhs) const
+{
+    return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
+}
+
 HttpRequest::HttpRequest()
-    : method_(HttpMethod::GET), status_(HttpStatus::OK), mVersion("1.1"),
+    : method_(HttpMethod::GET), status_(HttpStatus::OK), mVersion(),
       close_(true), path_("/")
 {}
 
 HttpRequest::HttpRequest(const HttpMethod &method, const HttpStatus &status,
-                         const std::string &version, bool close)
+                         uint8_t version, bool close)
     : method_(method), status_(status), mVersion(version), close_(close)
 {}
 
@@ -156,7 +162,8 @@ void HttpRequest::delCookiesEntry(const std::string &key)
 
 std::ostream &HttpRequest::dump(std::ostream &ios) const
 {
-    ios << HttpMethodToString(method_) << " " << mURL << " HTTP/" << mVersion
+    ios << HttpMethodToString(method_) << " " << mURL << " HTTP/"
+        << ((uint32_t)(mVersion >> 4)) << "." << ((uint32_t)(mVersion & 0x0F))
         << "\r\n";
 
     for (auto it : headres_)
@@ -184,11 +191,10 @@ std::string HttpRequest::toString() const
     return ss.str();
 }
 
-HttpResponse::HttpResponse()
-    : status_(HttpStatus::OK), mVersion("1.1"), close_(true)
+HttpResponse::HttpResponse() : status_(HttpStatus::OK), mVersion(), close_(true)
 {}
 
-HttpResponse::HttpResponse(const HttpStatus &status, const std::string &version,
+HttpResponse::HttpResponse(const HttpStatus &status, uint8_t version,
                            bool close)
     : status_(status), mVersion(version), close_(close)
 {}
@@ -215,7 +221,8 @@ void HttpResponse::delHeaderEntry(const std::string &key)
 std::ostream &HttpResponse::dump(std::ostream &ios) const
 {
 
-    ios << "HTTP/" << mVersion << " " << (uint32_t)status_ << " "
+    ios << "HTTP/" << ((uint32_t)(mVersion >> 4)) << "."
+        << ((uint32_t)(mVersion & 0x0F)) << " " << (uint32_t)status_ << " "
         << (reason_.empty() ? HttpStatusToString(status_) : reason_) << "\r\n";
 
     for (auto &it : headers_)

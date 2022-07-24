@@ -14,6 +14,7 @@
 #include <string>
 #include <sys/types.h>
 #include <unordered_map>
+#include <vector>
 namespace qslary
 {
 namespace http
@@ -150,24 +151,30 @@ HttpStatus CharsToHttpStatus(const char *status);
 const char *HttpMethodToString(const HttpMethod &method);
 const char *HttpStatusToString(const HttpStatus &status);
 
+struct CaseInsensitiveLess
+{
+    bool operator()(const std::string &lhs, const std::string &rhs) const;
+};
+
 class HttpRequest : public noncopyable
 {
 public:
     typedef std::shared_ptr<HttpRequest> ptr;
-    typedef std::map<std::string, std::string> HttpRequestMap;
+    typedef std::map<std::string, std::string, CaseInsensitiveLess>
+        HttpRequestMap;
     std::ostream &dump(std::ostream &ios) const;
     std::string toString() const;
 
     HttpRequest();
     HttpRequest(const HttpMethod &method, const HttpStatus &status,
-                const std::string &version = "1.1", bool close = true);
+                uint8_t version, bool close = true);
     ~HttpRequest(){};
 
     void init();
 
     HttpMethod getMethod() const { return method_; }
     HttpStatus getStatus() const { return status_; }
-    std::string getVersion() const { return mVersion; }
+    uint8_t getVersion() const { return mVersion; }
     bool isClose() const { return close_; }
     std::string getPath() const { return path_; }
     std::string getQuery() const { return query_; }
@@ -177,7 +184,7 @@ public:
     void setMethod(const HttpMethod &method) { method_ = method; }
     void setStatus(const HttpStatus &status) { status_ = status; }
     void SetProtocl(const std::string &protocl) { mProtocol = protocl; }
-    void setVersion(const std::string &version) { mVersion = version; }
+    void setVersion(uint8_t version) { mVersion = version; }
     void SetURL(const std::string url) { mURL = url; }
     void setClose(bool close) { close_ = close; }
     void setPath(const std::string &path) { path_ = path; };
@@ -246,7 +253,7 @@ private:
 private:
     HttpMethod method_;
     std::string mProtocol;
-    std::string mVersion;
+    uint8_t mVersion;
     HttpStatus status_;
     bool close_;
     std::string mURL;
@@ -265,17 +272,17 @@ class HttpResponse : public noncopyable
 {
 public:
     typedef std::shared_ptr<HttpResponse> ptr;
-    typedef std::map<std::string, std::string> HttpResponseMap;
+    typedef std::map<std::string, std::string, CaseInsensitiveLess>
+        HttpResponseMap;
     std::ostream &dump(std::ostream &ios) const;
     std::string toString() const;
 
     HttpResponse();
-    HttpResponse(const HttpStatus &status, const std::string &version = "1.1",
-                 bool close = true);
+    HttpResponse(const HttpStatus &status, uint8_t version, bool close = true);
     ~HttpResponse() = default;
 
     HttpStatus getStatus() const { return status_; }
-    std::string getVersion() const { return mVersion; }
+    uint8_t getVersion() const { return mVersion; }
     bool getClose() const { return close_; }
     std::string getBody() const { return body_; }
     std::string getReason() const { return reason_; }
@@ -291,11 +298,11 @@ public:
     }
     std::string GetStatusCode() const { return mStatusCode; }
     std::string GetStatusDesc() const { return mStatusDesc; }
-    std::string GetVersion() const { return mVersion; }
+    uint8_t GetVersion() const { return mVersion; }
     std::string GetBody() const { return body_; }
 
     void setStatus(const HttpStatus &status) { status_ = status; }
-    void setVersion(const std::string version) { mVersion = version; }
+    void setVersion(uint8_t version) { mVersion = version; }
     void setClose(bool close) { close_ = close; }
     void setBody(const std::string &body) { body_ = body; }
     void setReason(const std::string &reason) { reason_ = reason; }
@@ -337,11 +344,13 @@ private:
     HttpStatus status_;
     std::string mStatusCode;
     std::string mStatusDesc;
-    std::string mVersion;
+    uint8_t mVersion;
     bool close_;
     std::string body_;
     std::string reason_;
     HttpResponseMap headers_;
+    std::vector<std::string> m_cookies;
+    bool m_websocket;
 };
 
 std::ostream &operator<<(std::ostream &os, const HttpRequest &req);

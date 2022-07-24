@@ -24,6 +24,7 @@ set(LIB_SRC
     qslary/net/Socket.cc qslary/net/FdManager.cc
     qslary/net/ByteArray.cc qslary/net/TcpServer.cc
     qslary/http/Http.cc qslary/http/HttpParser.cc
+    qslary/http/http_request_parser.cc qslary/http/http_response_parser.cc
     # qslary/Timer.cc
 )
 
@@ -40,32 +41,6 @@ force_redefine_file_macro_for_sources(qslary)
 
 # add_library(qslary STATIC ${LIB_SRC})
 
-# add_executable(test tests/test.cc)
-#force_redefine_file_macro_for_sources(test)
-# add_dependencies(test qslary)
-# target_link_libraries(test qslary)
-
-# add_executable(test_config tests/test_config.cc)
-# force_redefine_file_macro_for_sources(test_config)
-# add_dependencies(test_config qslary)
-# target_link_libraries(test_config qslary yaml-cpp pthread)
-
-
-# add_executable(test_thread tests/test_thread.cc)
-# force_redefine_file_macro_for_sources(test_thread)
-# add_dependencies(test_thread qslary)
-# target_link_libraries(test_thread qslary yaml-cpp pthread)
-
-
-# add_executable(test_mutex tests/test_mutex.cc)
-# force_redefine_file_macro_for_sources(test_mutex)
-# add_dependencies(test_mutex qslary)
-# target_link_libraries(test_mutex qslary yaml-cpp pthread)
-
-# add_executable(test_fiber tests/test_fiber.cc)
-# force_redefine_file_macro_for_sources(test_fiber)
-# add_dependencies(test_fiber qslary)
-# target_link_libraries(test_fiber qslary yaml-cpp pthread)
 
 add_executable(test_scheduler tests/test_scheduler.cc)
 force_redefine_file_macro_for_sources(test_scheduler)
@@ -89,10 +64,10 @@ force_redefine_file_macro_for_sources(test_byteArray)
 add_dependencies(test_byteArray qslary)
 target_link_libraries(test_byteArray qslary yaml-cpp pthread)
 
-add_executable(test_http_request_praser tests/test_http_request_praser.cc)
-force_redefine_file_macro_for_sources(test_http_request_praser)
-add_dependencies(test_http_request_praser qslary)
-target_link_libraries(test_http_request_praser qslary yaml-cpp pthread)
+add_executable(test_http_parser tests/test_http_parser.cc)
+force_redefine_file_macro_for_sources(test_http_parser)
+add_dependencies(test_http_parser qslary)
+target_link_libraries(test_http_parser qslary yaml-cpp pthread)
 
 add_executable(test_tcp_server tests/test_tcp_server.cc)
 force_redefine_file_macro_for_sources(test_tcp_server)
